@@ -1,0 +1,3 @@
+C:/Users/parsa/Documents/university/C++/sharifOOPBaby403/Q4_q1_403101518/cmake-build-debug/CMakeFiles/Q4_q1_403101518.dir
+C:/Users/parsa/Documents/university/C++/sharifOOPBaby403/Q4_q1_403101518/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/parsa/Documents/university/C++/sharifOOPBaby403/Q4_q1_403101518/cmake-build-debug/CMakeFiles/rebuild_cache.dir

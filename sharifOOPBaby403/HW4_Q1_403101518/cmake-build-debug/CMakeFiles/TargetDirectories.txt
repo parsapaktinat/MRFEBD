@@ -1,0 +1,3 @@
+C:/Users/parsa/Dropbox/Drive/C++/sharifOOPBaby403/HW4_Q1_403101518/cmake-build-debug/CMakeFiles/HW4_Q1_403101518.dir
+C:/Users/parsa/Dropbox/Drive/C++/sharifOOPBaby403/HW4_Q1_403101518/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/parsa/Dropbox/Drive/C++/sharifOOPBaby403/HW4_Q1_403101518/cmake-build-debug/CMakeFiles/rebuild_cache.dir

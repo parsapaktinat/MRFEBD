@@ -1,0 +1,3 @@
+C:/Users/parsa/Documents/university/C++/Clion/HW1_Q1_403101518.cpp/cmake-build-debug/CMakeFiles/HW1_Q1_403101518_cpp.dir
+C:/Users/parsa/Documents/university/C++/Clion/HW1_Q1_403101518.cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/parsa/Documents/university/C++/Clion/HW1_Q1_403101518.cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
