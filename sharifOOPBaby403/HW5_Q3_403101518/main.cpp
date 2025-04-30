@@ -1,7 +1,21 @@
-#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello, World!" << std::endl;
+class BankAccount {
+private:
+    static double annualInterestRate;
+    static double taxRate;
+
+    static void applyIntesterRateToAll() {
+
+    }
+
+    static void applyTaxToAll() {
+        
+    }
+};
+
+int main() {
+
     return 0;
 }
