@@ -11,8 +11,13 @@ private:
     }
 
     static void applyTaxToAll() {
-        
+
     }
+};
+
+class Customer {
+private:
+    static vector<BankAccount> customerList;
 };
 
 int main() {
