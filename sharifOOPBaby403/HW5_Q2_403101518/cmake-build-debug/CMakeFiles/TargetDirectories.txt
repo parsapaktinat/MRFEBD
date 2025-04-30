@@ -1,3 +1,0 @@
-C:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW5_Q2_403101518/cmake-build-debug/CMakeFiles/HW5_Q2_403101518.dir
-C:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW5_Q2_403101518/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW5_Q2_403101518/cmake-build-debug/CMakeFiles/rebuild_cache.dir
