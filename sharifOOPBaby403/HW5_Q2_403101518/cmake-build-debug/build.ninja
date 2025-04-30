@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_HW5_Q2_403101518: phony || .
 
 build CMakeFiles/HW5_Q2_403101518.dir/main.cpp.obj: CXX_COMPILER__HW5_Q2_403101518_unscanned_Debug C$:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW5_Q2_403101518/main.cpp || cmake_object_order_depends_target_HW5_Q2_403101518
   DEP_FILE = CMakeFiles\HW5_Q2_403101518.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\HW5_Q2_403101518.dir
   OBJECT_FILE_DIR = CMakeFiles\HW5_Q2_403101518.dir
   TARGET_COMPILE_PDB = CMakeFiles\HW5_Q2_403101518.dir\
