@@ -3,10 +3,12 @@ using namespace std;
 
 #define cs string &
 
-string LSC(cs, cs);
+string LSC(cs, cs, cs);
 
 int main() {
-
+    string string1,string2,lsc;
+    cin >> string1 >> string2;
+    cout << LSC(string1,string2,lsc) << endl;
     return 0;
 }
 
@@ -18,11 +20,10 @@ string LSC(cs string1, cs string2, string & lsc) {
         lsc = string1[numberOfString1] + lsc;
     }
 
-    string1.pop_back();
-    string2.pop_back();
-    if (!string1.empty() && !string2.empty()) {
-        LSC(string1,string2,lsc);
-    }
-
-    return lsc
+    string newString1 = string1.substr(0,numberOfString1-1);
+    string newString2 = string2.substr(0,numberOfString2-1);
+    if (!string1.empty() && !newStirng2.empty())
+        LSC(string1,newString2,lsc);
+    else
+        return lsc;
 }
