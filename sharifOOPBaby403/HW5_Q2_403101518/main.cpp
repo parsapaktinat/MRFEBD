@@ -1,29 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define cs string &
-
-string LSC(cs, cs, cs);
+string LSC(const string &, const string &, int, int);
 
 int main() {
     string string1,string2,lsc;
     cin >> string1 >> string2;
-    cout << LSC(string1,string2,lsc) << endl;
+
+    int i = string1.size()-1, j = string2.size()-1;
+
+    cout << LSC(string1,string2,i,j) << endl;
     return 0;
 }
 
-string LSC(cs string1, cs string2, string & lsc) {
-    size_t numberOfString1 = string1.size();
-    size_t numberOfString2 = string2.size();
-
-    if (string1[numberOfString1-1] == string2[numberOfString2-1]) {
-        lsc = string1[numberOfString1] + lsc;
+string LSC(const string &s1,const string &s2, int i, int j) {
+    if (i < 0 || j < 0) {
+       return "";
     }
-
-    string newString1 = string1.substr(0,numberOfString1-1);
-    string newString2 = string2.substr(0,numberOfString2-1);
-    if (!string1.empty() && !newStirng2.empty())
-        LSC(string1,newString2,lsc);
-    else
-        return lsc;
+    if (s1[i] == s2[j]) {
+        return LSC(s1,s2,i-1,j-1) + s1[i];
+    }
+    else {
+        string lsc1 = LSC(s1,s2,i-1,j);
+        string lsc2 = LSC(s1,s2,i,j-1);
+        return (lsc1.length() > lsc2.length()) ? lsc1 : lsc2;
+    }
 }
