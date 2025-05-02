@@ -104,6 +104,7 @@ public:
 
             // Deposit money
             else if (cp[0] == "deposit" && cp.size() == 3) {
+                cout << fixed << setprecision(2);
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
                 double balance = 0.0;
@@ -115,6 +116,7 @@ public:
 
             // Withdraw money
             if (cp[0] == "withdraw" && cp.size() == 3) {
+                cout << fixed << setprecision(2);
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
                 double balance = 0.0;
@@ -132,12 +134,14 @@ public:
 
             // Balance
             else if (cp[0] == "balance" && cp.size() == 2) {
+                cout << fixed << setprecision(2);
                 Customer* customer = findCustomerByAccountNumber(cp[1]);
                 cout << "Account " << cp[1] << " balance: " << customer->getAccountNumber() << endl;
             }
 
             // Show all customers
             else if (cp[0] == "show_all") {
+                cout << fixed << setprecision(2);
                 for (auto customer : Customer::customerList) {
                     cout << customer.getName() << " " << customer.getNationalID() << " " << customer.getAccountNumber() << " " << customer.getbalance() << endl;
                 }
@@ -166,7 +170,18 @@ public:
             // Apply tax
             else if (cp[0] == "apply_tax") {
                 cout << "Tax applied." << endl;
+                BankAccount::applyTaxToAll();
             }
+
+            // Exit
+            else if (cp[0] == "exit") {
+                cout << "Goodbye!" << endl;
+                return;
+            }
+
+            // Invalid command
+            else
+                cout << "invalid command!" << endl;
         }
     }
 };
@@ -190,9 +205,21 @@ Customer* findCustomerByAccountNumber(cs accountNumber) {
 }
 
 void BankAccount::applyIntesterRateToAll() {
+    cout << fixed << setprecision(2);
     for (Customer &customer:Customer::customerList) {
         double oldBalance = customer.getbalance();
         customer.applyInterest(BankAccount::annualInterestRate);
+        double newBalance = customer.getbalance();
+
+        cout << customer.getName() << " " << oldBalance << " => " << newBalance << endl;
+    }
+}
+
+void BankAccount::applyTaxToAll() {
+    cout << fixed << setprecision(2);
+    for (Customer &customer:Customer::customerList) {
+        double oldBalance = customer.getbalance();
+        customer.applyTax(BankAccount::taxRate);
         double newBalance = customer.getbalance();
 
         cout << customer.getName() << " " << oldBalance << " => " << newBalance << endl;
