@@ -26,6 +26,18 @@ public:
     double getInitialBalance() const {return initialBalance;}
     void setInitialBalance(double initialBalance) {this->initialBalance = initialBalance;}
 
+    double deposit(double money) {
+        initialBalance += money;
+        return initialBalance;
+    }
+
+    bool withdraw(double amount) {
+        if (initialBalance - amount < 0)
+            return false;
+        initialBalance -= amount;
+        return true;
+    }
+
 };
 
 class BankAccount {
@@ -42,9 +54,20 @@ public:
     }
 };
 
+vector<Customer> Customer::customerList;
+double BankAccount::taxRate = 0.0;
+double BankAccount::annualInterestRate = 0.0;
+
+Customer* findCustomerByAccountNumber(cs accountNumber) {
+    for (auto customer : Customer::customerList) {
+        if (customer.getAccountNumber() == accountNumber) {
+            return &customer;
+        }
+    }
+    return NULL;
+}
+
 class Control {
-private:
-    Customer customer;
 public:
     // Add new customer
     int addCustomer(cs name, cs nationalID, cs accountNumber, double initialBalance) {
@@ -62,14 +85,27 @@ public:
     }
 
     // Deposit money
-    int depositMoney(cs accountNumebr, double money) {
+    int depositMoney(cs accountNumebr, double money, double &balance) {
+        Customer* customer = findCustomerByAccountNumber(accountNumebr);
+        if (customer) {
+            balance = customer->deposit(money);
+            return 1;
+        }
+    }
 
+    // Withdraw money
+    int withdrawMoney(cs accountNumber, double amount, double &balance) {
+        Customer* customer = findCustomerByAccountNumber(accountNumber);
+        if (!customer->withdraw(amount))
+            return 1;
+        balance = customer->getInitialBalance();
+        return 2;
     }
 };
 
 class View {
 private:
-    Customer customer;
+    Control controller;
 public:
     void run() {
         string command,word;
@@ -87,8 +123,8 @@ public:
                 string name = cp[1];
                 string nationalID = cp[2];
                 string accountNumber = cp[3];
-                string initialBalance = cp[4];
-                int status = customer.addCustomer(name, nationalID, accountNumber, initialBalance);
+                double initialBalance = stod(cp[4]);
+                int status = controller.addCustomer(name, nationalID, accountNumber, initialBalance);
                 switch (status) {
                     case 1:
                         cout << "Error! this name is already registered." << endl;
@@ -109,7 +145,27 @@ public:
             if (cp[0] == "deposit" && cp.size() == 3) {
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
-                int status
+                double balance = 0.0;
+                int status = controller.depositMoney(accountNumber,amount,balance);
+                if (status == 1) {
+                    cout << "Deposit successful. New balance: " << balance << endl;
+                }
+            }
+
+            // Withdraw money
+            if (cp[0] == "withdraw" && cp.size() == 3) {
+                string accountNumber = cp[1];
+                double amount = stod(cp[2]);
+                double balance = 0.0;
+                int status = controller.withdrawMoney(accountNumber,amount,balance);
+                switch (status) {
+                    case 1:
+                        cout << "Error! Insufficient funds " << endl;
+                        break;
+                    case 2:
+                        cout << "Withdrawal successful. New balance: " << balance << endl;
+                        break;
+                }
             }
 
         }
