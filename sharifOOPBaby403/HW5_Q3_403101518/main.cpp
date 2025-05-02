@@ -67,45 +67,7 @@ Customer* findCustomerByAccountNumber(cs accountNumber) {
     return NULL;
 }
 
-class Control {
-public:
-    // Add new customer
-    int addCustomer(cs name, cs nationalID, cs accountNumber, double initialBalance) {
-        for (auto customer : Customer::customerList) {
-            if (customer.getName() == name)
-                return 1;
-            if (customer.getNationalID() == nationalID)
-                return 2;
-            if (customer.getAccountNumber() == accountNumber)
-                return 3;
-        }
-        Customer newCustomer(name,nationalID,accountNumber,initialBalance);
-        Customer::customerList.push_back(newCustomer);
-        return 4;
-    }
-
-    // Deposit money
-    int depositMoney(cs accountNumebr, double money, double &balance) {
-        Customer* customer = findCustomerByAccountNumber(accountNumebr);
-        if (customer) {
-            balance = customer->deposit(money);
-            return 1;
-        }
-    }
-
-    // Withdraw money
-    int withdrawMoney(cs accountNumber, double amount, double &balance) {
-        Customer* customer = findCustomerByAccountNumber(accountNumber);
-        if (!customer->withdraw(amount))
-            return 1;
-        balance = customer->getInitialBalance();
-        return 2;
-    }
-};
-
-class View {
-private:
-    Control controller;
+class ProcessCommands {
 public:
     void run() {
         string command,word;
@@ -124,20 +86,29 @@ public:
                 string nationalID = cp[2];
                 string accountNumber = cp[3];
                 double initialBalance = stod(cp[4]);
-                int status = controller.addCustomer(name, nationalID, accountNumber, initialBalance);
-                switch (status) {
-                    case 1:
+                bool flag = false;
+
+                for (auto customer : Customer::customerList) {
+                    if (customer.getName() == name) {
                         cout << "Error! this name is already registered." << endl;
+                        flag = true;
                         break;
-                    case 2:
+                    }
+                    else if (customer.getNationalID() == nationalID) {
                         cout << "Error! this national_ID is already registered." << endl;
+                        flag = true;
                         break;
-                    case 3:
+                    }
+                    else if (customer.getAccountNumber() == accountNumber) {
                         cout << "Error! this accountNumber is already registered." << endl;
+                        flag = true;
                         break;
-                    case 4:
-                        cout << "Customer " << name << " added. Account: " << accountNumber << endl;
-                        break;
+                    }
+                }
+                if (!flag) {
+                    Customer newCustomer(name,nationalID,accountNumber,initialBalance);
+                    Customer::customerList.push_back(newCustomer);
+                    cout << "Customer " << name << " added. Account: " << accountNumber << endl;
                 }
             }
 
@@ -146,10 +117,10 @@ public:
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
                 double balance = 0.0;
-                int status = controller.depositMoney(accountNumber,amount,balance);
-                if (status == 1) {
-                    cout << "Deposit successful. New balance: " << balance << endl;
-                }
+
+                Customer* customer = findCustomerByAccountNumber(accountNumber);
+                balance = customer->deposit(amount);
+                cout << "Deposit successful. New balance: " << balance << endl;
             }
 
             // Withdraw money
@@ -157,15 +128,16 @@ public:
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
                 double balance = 0.0;
-                int status = controller.withdrawMoney(accountNumber,amount,balance);
-                switch (status) {
-                    case 1:
-                        cout << "Error! Insufficient funds " << endl;
-                        break;
-                    case 2:
-                        cout << "Withdrawal successful. New balance: " << balance << endl;
-                        break;
+
+                Customer* customer = findCustomerByAccountNumber(accountNumber);
+
+                if (!customer->withdraw(amount)) {
+                    cout << "Error! Insufficient funds" << endl;
+                    continue;
                 }
+
+                balance = customer->getInitialBalance();
+                cout << "Withdrawal successful. New balance: " << balance << endl;
             }
 
             // Balance
