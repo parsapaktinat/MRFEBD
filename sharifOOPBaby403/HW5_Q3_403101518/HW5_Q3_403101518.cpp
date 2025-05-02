@@ -191,7 +191,8 @@ double BankAccount::taxRate = 0.0;
 double BankAccount::annualInterestRate = 0.0;
 
 int main() {
-
+    ProcessCommands processCommands;
+    processCommands.run();
     return 0;
 }
 
