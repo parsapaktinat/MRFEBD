@@ -16,7 +16,7 @@ private:
     double balance = 0;
 
 public:
-    Customer(string name, string nationalID, string accountNumber, double balance) : name(name), nationalID(nationalID), accountNumber(accountNumber) {};
+    Customer(string name, string nationalID, string accountNumber, double balance) : name(name), nationalID(nationalID), accountNumber(accountNumber), balance(balance) {};
 
     static vector<Customer> customerList;
 
@@ -44,7 +44,7 @@ public:
 
     void applyTax(double rate) {
         double tax = balance * rate/100.0;
-        balance += tax;
+        balance -= tax;
     }
 };
 
@@ -84,20 +84,19 @@ public:
                         flag = true;
                         break;
                     }
-                    else if (customer.getNationalID() == nationalID) {
+                    if (customer.getNationalID() == nationalID) {
                         cout << "Error! this national_ID is already registered." << endl;
                         flag = true;
                         break;
                     }
-                    else if (customer.getAccountNumber() == accountNumber) {
+                    if (customer.getAccountNumber() == accountNumber) {
                         cout << "Error! this accountNumber is already registered." << endl;
                         flag = true;
                         break;
                     }
                 }
                 if (!flag) {
-                    Customer newCustomer(name,nationalID,accountNumber,balance);
-                    Customer::customerList.push_back(newCustomer);
+                    Customer::customerList.emplace_back(name,nationalID,accountNumber,balance);
                     cout << "Customer " << name << " added. Account: " << accountNumber << endl;
                 }
             }
@@ -115,7 +114,7 @@ public:
             }
 
             // Withdraw money
-            if (cp[0] == "withdraw" && cp.size() == 3) {
+            else if (cp[0] == "withdraw" && cp.size() == 3) {
                 cout << fixed << setprecision(2);
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
@@ -125,6 +124,7 @@ public:
 
                 if (!customer->withdraw(amount)) {
                     cout << "Error! Insufficient funds" << endl;
+                    cp.clear();
                     continue;
                 }
 
@@ -136,7 +136,7 @@ public:
             else if (cp[0] == "balance" && cp.size() == 2) {
                 cout << fixed << setprecision(2);
                 Customer* customer = findCustomerByAccountNumber(cp[1]);
-                cout << "Account " << cp[1] << " balance: " << customer->getAccountNumber() << endl;
+                cout << "Account " << cp[1] << " balance: " << customer->getbalance() << endl;
             }
 
             // Show all customers
@@ -182,6 +182,8 @@ public:
             // Invalid command
             else
                 cout << "invalid command!" << endl;
+
+            cp.clear();
         }
     }
 };
@@ -197,7 +199,7 @@ int main() {
 }
 
 Customer* findCustomerByAccountNumber(cs accountNumber) {
-    for (auto customer : Customer::customerList) {
+    for (auto &customer : Customer::customerList) {
         if (customer.getAccountNumber() == accountNumber) {
             return &customer;
         }
