@@ -3,41 +3,49 @@ using namespace std;
 
 #define cs const string &
 
+class Customer;
 class BankAccount;
+class ProcessCommands;
+Customer* findCustomerByAccountNumber(cs accountNumber);
 
 class Customer {
 private:
     string name;
     string nationalID;
     string accountNumber;
-    double initialBalance = 0;
+    double balance = 0;
 
 public:
-    Customer(string name, string nationalID, string accountNumber, double initialBalance) : name(name), nationalID(nationalID), accountNumber(accountNumber) {};
+    Customer(string name, string nationalID, string accountNumber, double balance) : name(name), nationalID(nationalID), accountNumber(accountNumber) {};
 
     static vector<Customer> customerList;
 
     string getName() const {return name;}
-    void setName(cs name) {this->name = name;}
     string getNationalID() const {return nationalID;}
-    void setNationalID(cs nationalID) {this->nationalID = nationalID;}
     string getAccountNumber() const {return accountNumber;}
-    void setAccountNumber(cs accountNumber) {this->accountNumber = accountNumber;}
-    double getInitialBalance() const {return initialBalance;}
-    void setInitialBalance(double initialBalance) {this->initialBalance = initialBalance;}
+    double getbalance() const {return balance;}
 
     double deposit(double money) {
-        initialBalance += money;
-        return initialBalance;
+        balance += money;
+        return balance;
     }
 
     bool withdraw(double amount) {
-        if (initialBalance - amount < 0)
+        if (balance - amount < 0)
             return false;
-        initialBalance -= amount;
+        balance -= amount;
         return true;
     }
 
+    void applyInterest(double rate) {
+        double interest = balance * rate/100.0;
+        balance += interest;
+    }
+
+    void applyTax(double rate) {
+        double tax = balance * rate/100.0;
+        balance += tax;
+    }
 };
 
 class BankAccount {
@@ -45,27 +53,9 @@ public:
     static double annualInterestRate;
     static double taxRate;
 
-    static void applyIntesterRateToAll() {
-
-    }
-
-    static void applyTaxToAll() {
-
-    }
+    static void applyIntesterRateToAll();
+    static void applyTaxToAll();
 };
-
-vector<Customer> Customer::customerList;
-double BankAccount::taxRate = 0.0;
-double BankAccount::annualInterestRate = 0.0;
-
-Customer* findCustomerByAccountNumber(cs accountNumber) {
-    for (auto customer : Customer::customerList) {
-        if (customer.getAccountNumber() == accountNumber) {
-            return &customer;
-        }
-    }
-    return NULL;
-}
 
 class ProcessCommands {
 public:
@@ -85,7 +75,7 @@ public:
                 string name = cp[1];
                 string nationalID = cp[2];
                 string accountNumber = cp[3];
-                double initialBalance = stod(cp[4]);
+                double balance = stod(cp[4]);
                 bool flag = false;
 
                 for (auto customer : Customer::customerList) {
@@ -106,7 +96,7 @@ public:
                     }
                 }
                 if (!flag) {
-                    Customer newCustomer(name,nationalID,accountNumber,initialBalance);
+                    Customer newCustomer(name,nationalID,accountNumber,balance);
                     Customer::customerList.push_back(newCustomer);
                     cout << "Customer " << name << " added. Account: " << accountNumber << endl;
                 }
@@ -136,7 +126,7 @@ public:
                     continue;
                 }
 
-                balance = customer->getInitialBalance();
+                balance = customer->getbalance();
                 cout << "Withdrawal successful. New balance: " << balance << endl;
             }
 
@@ -149,7 +139,7 @@ public:
             // Show all customers
             else if (cp[0] == "show_all") {
                 for (auto customer : Customer::customerList) {
-                    cout << customer.getName() << " " << customer.getNationalID() << " " << customer.getAccountNumber() << " " << customer.getInitialBalance() << endl;
+                    cout << customer.getName() << " " << customer.getNationalID() << " " << customer.getAccountNumber() << " " << customer.getbalance() << endl;
                 }
             }
 
@@ -167,13 +157,44 @@ public:
                 cout << "Tax rate set to " << taxRate << " %" << endl;
             }
 
-            //
+            // Apply interest
+            else if (cp[0] == "apply_interest") {
+                cout << "Interest applied." << endl;
+                BankAccount::applyIntesterRateToAll();
+            }
 
+            // Apply tax
+            else if (cp[0] == "apply_tax") {
+                cout << "Tax applied." << endl;
+            }
         }
     }
 };
 
+vector<Customer> Customer::customerList;
+double BankAccount::taxRate = 0.0;
+double BankAccount::annualInterestRate = 0.0;
+
 int main() {
 
     return 0;
+}
+
+Customer* findCustomerByAccountNumber(cs accountNumber) {
+    for (auto customer : Customer::customerList) {
+        if (customer.getAccountNumber() == accountNumber) {
+            return &customer;
+        }
+    }
+    return NULL;
+}
+
+void BankAccount::applyIntesterRateToAll() {
+    for (Customer &customer:Customer::customerList) {
+        double oldBalance = customer.getbalance();
+        customer.applyInterest(BankAccount::annualInterestRate);
+        double newBalance = customer.getbalance();
+
+        cout << customer.getName() << " " << oldBalance << " => " << newBalance << endl;
+    }
 }
