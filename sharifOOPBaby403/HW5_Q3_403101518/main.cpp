@@ -168,6 +168,21 @@ public:
                 }
             }
 
+            // Balance
+            if (cp[0] == "balance" && cp.size() == 2) {
+                Customer* customer = findCustomerByAccountNumber(cp[1]);
+                cout << "Account " << cp[1] << " balance: " << customer->getAccountNumber() << endl;
+            }
+
+            // Show all customers
+            if (cp[0] == "show_all") {
+                for (auto customer : Customer::customerList) {
+                    cout << customer.getName() << " " << customer.getNationalID() << " " << customer.getAccountNumber() << " " << customer.getInitialBalance() << endl;
+                }
+            }
+
+            //
+
         }
     }
 };
