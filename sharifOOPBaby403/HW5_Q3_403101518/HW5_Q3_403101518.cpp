@@ -149,16 +149,18 @@ public:
 
             // Set interest
             else if (cp[0] == "set_interest") {
+                cout << fixed << setprecision(2);
                 double interestRate = stod(cp[1]);
                 BankAccount::annualInterestRate = interestRate;
-                cout << "Interest rate set to " << interestRate << " %" << endl;
+                cout << "Interest rate set to " << interestRate << "%" << endl;
             }
 
             // Set tax
             else if (cp[0] == "set_tax") {
+                cout << fixed << setprecision(2);
                 double taxRate = stod(cp[1]);
                 BankAccount::taxRate = taxRate;
-                cout << "Tax rate set to " << taxRate << " %" << endl;
+                cout << "Tax rate set to " << taxRate << "%" << endl;
             }
 
             // Apply interest
@@ -214,7 +216,7 @@ void BankAccount::applyIntesterRateToAll() {
         customer.applyInterest(BankAccount::annualInterestRate);
         double newBalance = customer.getbalance();
 
-        cout << customer.getName() << " " << oldBalance << " => " << newBalance << endl;
+        cout << customer.getName() << ": " << oldBalance << " => " << newBalance << endl;
     }
 }
 
@@ -225,6 +227,6 @@ void BankAccount::applyTaxToAll() {
         customer.applyTax(BankAccount::taxRate);
         double newBalance = customer.getbalance();
 
-        cout << customer.getName() << " " << oldBalance << " => " << newBalance << endl;
+        cout << customer.getName() << ": " << oldBalance << " => " << newBalance << endl;
     }
 }
