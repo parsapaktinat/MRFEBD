@@ -113,7 +113,7 @@ public:
             }
 
             // Deposit money
-            if (cp[0] == "deposit" && cp.size() == 3) {
+            else if (cp[0] == "deposit" && cp.size() == 3) {
                 string accountNumber = cp[1];
                 double amount = stod(cp[2]);
                 double balance = 0.0;
@@ -141,16 +141,30 @@ public:
             }
 
             // Balance
-            if (cp[0] == "balance" && cp.size() == 2) {
+            else if (cp[0] == "balance" && cp.size() == 2) {
                 Customer* customer = findCustomerByAccountNumber(cp[1]);
                 cout << "Account " << cp[1] << " balance: " << customer->getAccountNumber() << endl;
             }
 
             // Show all customers
-            if (cp[0] == "show_all") {
+            else if (cp[0] == "show_all") {
                 for (auto customer : Customer::customerList) {
                     cout << customer.getName() << " " << customer.getNationalID() << " " << customer.getAccountNumber() << " " << customer.getInitialBalance() << endl;
                 }
+            }
+
+            // Set interest
+            else if (cp[0] == "set_interest") {
+                double interestRate = stod(cp[1]);
+                BankAccount::annualInterestRate = interestRate;
+                cout << "Interest rate set to " << interestRate << " %" << endl;
+            }
+
+            // Set tax
+            else if (cp[0] == "set_tax") {
+                double taxRate = stod(cp[1]);
+                BankAccount::taxRate = taxRate;
+                cout << "Tax rate set to " << taxRate << " %" << endl;
             }
 
             //
