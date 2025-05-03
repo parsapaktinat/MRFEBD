@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void merge(vector<char>& str, int l, int m, int r);
-void mergeSort(vector<char>& arr, int l, int r);
-string sorting(const string& str);
+void merge(vector<char>&, int, int, int);
+void mergeSort(vector<char>&, int, int);
+string sorting(const string&);
 
 int main() {
     int n;
@@ -55,12 +55,12 @@ void merge(vector<char>& str, int l, int m, int r) {
         str[k++] = right[j++];
 }
 
-void mergeSort(vector<char>& arr, int l, int r) {
+void mergeSort(vector<char>& str, int l, int r) {
     if (l < r) {
         int m = (l + r) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
+        mergeSort(str, l, m);
+        mergeSort(str, m + 1, r);
+        merge(str, l, m, r);
     }
 }
 
