@@ -1,24 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define cs const string &
+
 class Food {
 protected:
-    double basePrice = 0;
-    double step = 0;
+    double basePrice;
+    double step;
     string name;
 
+
 public:
-    Food (double bp, double s, string n) : basePrice(bp), step(s), name(n) {}
+    Food (double bp, double s, cs n) : basePrice(bp), step(s), name(n) {}
 
 };
 
 class Drink:public Food {
 private:
-    double volume = 0;
+    double volume;
 
 public:
-    Drink (double basePrice, double step, string name, double volume) : Food(basePrice,step,name), volume(volume)  {}
-    
+    Drink (double basePrice, cs name, double volume) : Food(basePrice,10,name), volume(volume)  {}
+
+
 };
 
 class Dessert:public Food {
@@ -29,7 +33,21 @@ class Main:public Food {
 
 };
 
+class Menu {
+private:
+    unordered_map<string, Drink> drinks;
+    unordered_map<string, Dessert> desserts;
+    unordered_map<string, Main> mains;
+
+public:
+    int addDrink(cs name, double price, double volume) {
+        if ()
+    }
+};
+
 class ProcessCommands {
+private:
+    Menu menu;
 public:
     void run() {
         string command, word;
