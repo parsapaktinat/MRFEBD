@@ -58,6 +58,7 @@ public:
         }
         Drink drink(price,name,volume);
         drinks.emplace(name,drink);
+        changeTotalPrice(price,true);
         return 2;
     }
 
@@ -68,6 +69,7 @@ public:
         }
         Dessert dessert(price,name,calories);
         desserts.emplace(name,dessert);
+        changeTotalPrice(price,true);
         return 2;
     }
 
@@ -77,6 +79,7 @@ public:
         }
         Main main(price,name,weight);
         mains.emplace(name,main);
+        changeTotalPrice(price,true);
         return 2;
     }
 };
