@@ -30,7 +30,13 @@ public:
     Dessert (double basePrice, cs name, double calories) : Food(basePrice,name,50), calories(calories) {}
 };
 
-class Main:public Food {};
+class Main:public Food {
+private:
+    double weight;
+
+public:
+    Main (double basePrice, cs name, double weight) : Food(basePrice,name,50), weight(weight) {}
+};
 
 // Controller
 class Menu {
@@ -62,6 +68,15 @@ public:
         }
         Dessert dessert(price,name,calories);
         desserts.emplace(name,dessert);
+        return 2;
+    }
+
+    int addMain(double price, cs name, double weight) {
+        if (mains.find(name) != mains.end()) {
+            return 1;
+        }
+        Main main(price,name,weight);
+        mains.emplace(name,main);
         return 2;
     }
 };
@@ -114,23 +129,21 @@ public:
                 }
             }
 
-            // // Add main
-            // else if (ussr[0] == "add" && ussr[1] == "main" && ussr.size() == 5) {
-            //     string name = ussr[2];
-            //     double price = stod(ussr[3]);
-            //     double weight = stod(ussr[4]);
-            //     int status = menu.addMain(price,name,weight);
-            //     switch (status) {
-            //         case 1:
-            //             cout << "Item already exists." << endl;
-            //         break;
-            //         case 2:
-            //             cout << name << " added!" << endl;
-            //         break;
-            //     }
-            // }
-
-
+            // Add main
+            else if (ussr[0] == "add" && ussr[1] == "main" && ussr.size() == 5) {
+                string name = ussr[2];
+                double price = stod(ussr[3]);
+                double weight = stod(ussr[4]);
+                int status = menu.addMain(price,name,weight);
+                switch (status) {
+                    case 1:
+                        cout << "Item already exists." << endl;
+                    break;
+                    case 2:
+                        cout << name << " added!" << endl;
+                    break;
+                }
+            }
 
             // Sum
             else if (ussr[0] == "sum")
