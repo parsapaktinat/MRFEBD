@@ -100,19 +100,46 @@ public:
 
     // Print final price
     int printFinalPrice(cs name, int& price) {
-        if (drinks.find(name) == drinks.end() && desserts.find(name) == desserts.end() && mains.find(name) == mains.end()) {
+        string status = findInMaps(name);
+        if (status == "nothing") 
             return 1;
-        }
-        else if (drinks.find(name) != drinks.end()) {
-            price = drinks.at(name).getBasePrice();
-        }
-        else if (desserts.find(name) != desserts.end()) {
-            price = desserts.at(name).getBasePrice();
-        }
-        else if (mains.find(name) != mains.end()) {
-            price = mains.at(name).getBasePrice();
+        else {
+            if (status == "drink")
+                price = drinks.at(name).getBasePrice();
+            else if (status == "dessert")
+                price = desserts.at(name).getBasePrice();
+            else if (status == "main")
+                price = mains.at(name).getBasePrice();
         }
         return 2;
+    }
+
+    // Delete Food
+    int deleteFood(cs name) {
+        string status = findInMaps(name);
+        if (status == "nothing")
+            return 1;
+        else {
+            if (status == "drink")
+                drinks.erase(name);
+            else if (status == "dessert")
+                desserts.erase(name);
+            else if (status == "main")
+                mains.erase(name);
+        }
+        return 2;
+    }
+
+    // helper function
+    string findInMaps(cs name) {
+        if (drinks.find(name) == drinks.end() && desserts.find(name) == desserts.end() && mains.find(name) == mains.end())
+            return "nothing";
+        else if (drinks.find(name) != drinks.end())
+            return "drink";
+        else if (desserts.find(name) != desserts.end())
+            return "dessert";
+        else if (mains.find(name) != mains.end())
+            return "main";
     }
 };
 
@@ -195,11 +222,23 @@ public:
                 }
             }
 
-            
-
             // Sum
             else if (ussr[0] == "sum")
                 cout << "Total: " << Menu::getTotalPrice() << endl;
+
+            // Delete food
+            else if (ussr[0] == "delete" && ussr.size() == 2) {
+                string name = ussr[1];
+                int status = menu.deleteFood(name);
+                switch (status) {
+                    case 1:
+                        cout << "Item doesn't exist." << endl;
+                        break;
+                    case 2:
+                        cout << name << " deleted." << endl;
+                        break;
+                }
+            }
 
             // End
             else if (ussr[0] == "end")
