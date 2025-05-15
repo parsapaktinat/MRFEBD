@@ -6,36 +6,40 @@ using namespace std;
 // Model
 class Food {
 protected:
-    double basePrice;
+    int basePrice;
     string name;
-    double step;
+    int step;
 
 public:
-    Food (double bp, cs n, double s) : basePrice(bp), name(n), step(s){}
+    Food (int bp, cs n, int s) : basePrice(bp), name(n), step(s){}
+
+    int getStep() {
+        return step;
+    }
 };
 
 class Drink:public Food {
 private:
-    double volume;
+    int volume;
 
 public:
-    Drink (double basePrice, cs name, double volume) : Food(basePrice,name,10), volume(volume) {}
+    Drink (int basePrice, cs name, int volume) : Food(basePrice,name,10), volume(volume) {}
 };
 
 class Dessert:public Food {
 private:
-    double calories;
+    int calories;
 
 public:
-    Dessert (double basePrice, cs name, double calories) : Food(basePrice,name,50), calories(calories) {}
+    Dessert (int basePrice, cs name, int calories) : Food(basePrice,name,50), calories(calories) {}
 };
 
 class Main:public Food {
 private:
-    double weight;
+    int weight;
 
 public:
-    Main (double basePrice, cs name, double weight) : Food(basePrice,name,50), weight(weight) {}
+    Main (int basePrice, cs name, int weight) : Food(basePrice,name,20), weight(weight) {}
 };
 
 // Controller
@@ -44,42 +48,45 @@ private:
     unordered_map<string, Drink> drinks;
     unordered_map<string, Dessert> desserts;
     unordered_map<string, Main> mains;
-    static double totalPrice;
+    static int totalPrice;
 
 public:
     // Static functions for static variables
-    static double getTotalPrice();
-    static void changeTotalPrice(double price, bool sum);
+    static int getTotalPrice();
+    static void changeTotalPrice(int price, bool sum);
 
     // Add drink
-    int addDrink(double price, cs name, double volume) {
+    int addDrink(int price, cs name, int volume) {
         if (drinks.find(name) != drinks.end()) {
             return 1;
         }
         Drink drink(price,name,volume);
         drinks.emplace(name,drink);
-        changeTotalPrice(price,true);
+        price += volume/drink.getStep();
+        Menu::changeTotalPrice(price,true);
         return 2;
     }
 
     // Add dessert
-    int addDessert(double price, cs name, double calories) {
+    int addDessert(int price, cs name, int calories) {
         if (desserts.find(name) != desserts.end()) {
             return 1;
         }
         Dessert dessert(price,name,calories);
         desserts.emplace(name,dessert);
-        changeTotalPrice(price,true);
+        price += calories/dessert.getStep();
+        Menu::changeTotalPrice(price,true);
         return 2;
     }
 
-    int addMain(double price, cs name, double weight) {
+    int addMain(int price, cs name, int weight) {
         if (mains.find(name) != mains.end()) {
             return 1;
         }
         Main main(price,name,weight);
         mains.emplace(name,main);
-        changeTotalPrice(price,true);
+        price += weight/main.getStep();
+        Menu::changeTotalPrice(price,true);
         return 2;
     }
 };
@@ -103,8 +110,8 @@ public:
             // Add drinks
             if (ussr[0] == "add" && ussr[1] == "drink" && ussr.size() == 5) {
                 string name = ussr[2];
-                double price = stod(ussr[3]);
-                double volume = stod(ussr[4]);
+                int price = stod(ussr[3]);
+                int volume = stod(ussr[4]);
                 int status = menu.addDrink(price,name,volume);
                 switch (status) {
                     case 1:
@@ -119,8 +126,8 @@ public:
             // Add dessert
             else if (ussr[0] == "add" && ussr[1] == "dessert" && ussr.size() == 5) {
                 string name = ussr[2];
-                double price = stod(ussr[3]);
-                double calories = stod(ussr[4]);
+                int price = stod(ussr[3]);
+                int calories = stod(ussr[4]);
                 int status = menu.addDessert(price,name,calories);
                 switch (status) {
                     case 1:
@@ -135,8 +142,8 @@ public:
             // Add main
             else if (ussr[0] == "add" && ussr[1] == "main" && ussr.size() == 5) {
                 string name = ussr[2];
-                double price = stod(ussr[3]);
-                double weight = stod(ussr[4]);
+                int price = stod(ussr[3]);
+                int weight = stod(ussr[4]);
                 int status = menu.addMain(price,name,weight);
                 switch (status) {
                     case 1:
@@ -150,7 +157,7 @@ public:
 
             // Sum
             else if (ussr[0] == "sum")
-                cout << "Total: " << Menu::getTotalPrice << endl;
+                cout << "Total: " << Menu::getTotalPrice() << endl;
 
             // End
             else if (ussr[0] == "end")
@@ -161,13 +168,13 @@ public:
     }
 };
 
-double Menu::totalPrice = 0;
+int Menu::totalPrice = 0;
 
-double Menu::getTotalPrice() {
+int Menu::getTotalPrice() {
     return totalPrice;
 }
 
-void Menu::changeTotalPrice(double price,bool sum) {
+void Menu::changeTotalPrice(int price,bool sum) {
     if (sum) 
         totalPrice += price;
     else 
