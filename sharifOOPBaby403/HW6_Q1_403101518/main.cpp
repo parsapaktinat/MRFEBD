@@ -7,13 +7,11 @@ using namespace std;
 class Food {
 protected:
     double basePrice;
-    double step;
     string name;
-
+    double step;
 
 public:
-    Food (double bp, double s, cs n) : basePrice(bp), step(s), name(n) {}
-
+    Food (double bp, cs n, double s) : basePrice(bp), name(n), step(s){}
 };
 
 class Drink:public Food {
@@ -21,18 +19,18 @@ private:
     double volume;
 
 public:
-    Drink (double basePrice, cs name, double volume) : Food(basePrice,10,name), volume(volume)  {}
-
-
+    Drink (double basePrice, cs name, double volume) : Food(basePrice,name,10), volume(volume) {}
 };
 
 class Dessert:public Food {
+private:
+    double calories;
 
+public:
+    Dessert (double basePrice, cs name, double calories) : Food(basePrice,name,50), calories(calories) {}
 };
 
-class Main:public Food {
-
-};
+class Main:public Food {};
 
 // Controller
 class Menu {
@@ -43,7 +41,7 @@ private:
 
 public:
     // Add drink
-    int addDrink(cs name, double price, double volume) {
+    int addDrink(double price, cs name, double volume) {
         if (drinks.find(name) != drinks.end()) {
             return 1;
         }
@@ -52,7 +50,15 @@ public:
         return 2;
     }
 
-
+    // Add dessert
+    int addDessert(double price, cs name, double calories) {
+        if (desserts.find(name) != desserts.end()) {
+            return 1;
+        }
+        Dessert dessert(price,name,calories);
+        desserts.emplace(name,dessert);
+        return 2;
+    }
 };
 
 // View
@@ -71,7 +77,8 @@ public:
             while (ss >> word)
                 ussr.push_back(word);
 
-            if (ussr[0] == "add" && ussr[1] == "drink") {
+            // Add drinks
+            if (ussr[0] == "add" && ussr[1] == "drink" && ussr.size() == 5) {
                 string name = ussr[2];
                 double price = stod(ussr[3]);
                 double volume = stod(ussr[4]);
@@ -86,6 +93,39 @@ public:
                 }
             }
 
+            // Add dessert
+            else if (ussr[0] == "add" && ussr[1] == "dessert" && ussr.size() == 5) {
+                string name = ussr[2];
+                double price = stod(ussr[3]);
+                double calories = stod(ussr[4]);
+                int status = menu.addDessert(price,name,calories);
+                switch (status) {
+                    case 1:
+                        cout << "Item already exists." << endl;
+                        break;
+                    case 2:
+                        cout << name << " added!" << endl;
+                        break;
+                }
+            }
+
+            // Add main
+            else if (ussr[0] == "add" && ussr[1] == "main" && ussr.size() == 5) {
+                string name = ussr[2];
+                double price = stod(ussr[3]);
+                double weight = stod(ussr[4]);
+                int status = menu.addMain(price,name,weight);
+                switch (status) {
+                    case 1:
+                        cout << "Item already exists." << endl;
+                    break;
+                    case 2:
+                        cout << name << " added!" << endl;
+                    break;
+                }
+            }
+
+            // End
             else if (ussr[0] == "end")
                 return;
 
