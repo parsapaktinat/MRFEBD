@@ -43,7 +43,7 @@ private:
 public:
     // Static functions for static variables
     static double getTotalPrice();
-    static void changeTotalPrice();
+    static void changeTotalPrice(double price, bool sum);
 
     // Add drink
     int addDrink(double price, cs name, double volume) {
@@ -133,9 +133,8 @@ public:
 
 
             // Sum
-            else if (ussr[0] == "sum") {
-                cout << "Total: " << Menu::totalPrice << endl;
-            }
+            else if (ussr[0] == "sum")
+                cout << "Total: " << Menu::getTotalPrice << endl;
 
             // End
             else if (ussr[0] == "end")
@@ -149,7 +148,14 @@ public:
 double Menu::totalPrice = 0;
 
 double Menu::getTotalPrice() {
-    if
+    return totalPrice;
+}
+
+void Menu::changeTotalPrice(double price,bool sum) {
+    if (sum) 
+        totalPrice += price;
+    else 
+        totalPrice -= price;
 }
 
 int main() {
