@@ -3,6 +3,7 @@ using namespace std;
 
 #define cs const string &
 
+// Model
 class Food {
 protected:
     double basePrice;
@@ -33,6 +34,7 @@ class Main:public Food {
 
 };
 
+// Controller
 class Menu {
 private:
     unordered_map<string, Drink> drinks;
@@ -40,11 +42,20 @@ private:
     unordered_map<string, Main> mains;
 
 public:
+    // Add drink
     int addDrink(cs name, double price, double volume) {
-        if ()
+        if (drinks.find(name) != drinks.end()) {
+            return 1;
+        }
+        Drink drink(price,name,volume);
+        drinks.emplace(name,drink);
+        return 2;
     }
+
+
 };
 
+// View
 class ProcessCommands {
 private:
     Menu menu;
@@ -57,15 +68,22 @@ public:
             getline(cin, command);
             stringstream ss(command);
 
-            while (ss >> word) {
+            while (ss >> word)
                 ussr.push_back(word);
-            }
 
             if (ussr[0] == "add" && ussr[1] == "drink") {
                 string name = ussr[2];
                 double price = stod(ussr[3]);
                 double volume = stod(ussr[4]);
-
+                int status = menu.addDrink(name,price,volume);
+                switch (status) {
+                    case 1:
+                        cout << "Item already exists." << endl;
+                        break;
+                    case 2:
+                        cout << name << " added!" << endl;
+                        break;
+                }
             }
 
             else if (ussr[0] == "end")
@@ -77,6 +95,7 @@ public:
 };
 
 int main() {
-
+    ProcessCommands process;
+    process.run();
     return 0;
 }
