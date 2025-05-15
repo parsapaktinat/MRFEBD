@@ -27,7 +27,7 @@ private:
     int volume;
 
 public:
-    Drink (int basePrice, cs name, int volume) : Food(basePrice,name,10), volume(volume) {
+    Drink (int bPrice, cs name, int v) : Food(bPrice,name,10), volume(v) {
         basePrice += volume/step;
     }
 };
@@ -37,7 +37,7 @@ private:
     int calories;
 
 public:
-    Dessert (int basePrice, cs name, int calories) : Food(basePrice,name,50), calories(calories) {
+    Dessert (int bPrice, cs name, int c) : Food(bPrice,name,50), calories(c) {
         basePrice += calories/step;
     }
 };
@@ -47,7 +47,7 @@ private:
     int weight;
 
 public:
-    Main (int basePrice, cs name, int weight) : Food(basePrice,name,20), weight(weight) {
+    Main (int bPrice, cs name, int w) : Food(bPrice,name,20), weight(w) {
         basePrice += weight/step;
     }
 };
@@ -120,26 +120,34 @@ public:
         if (status == "nothing")
             return 1;
         else {
-            if (status == "drink")
+            if (status == "drink"){
+                Menu::changeTotalPrice(drinks.at(name).getBasePrice(),false);
                 drinks.erase(name);
-            else if (status == "dessert")
+            }
+            else if (status == "dessert"){
+                Menu::changeTotalPrice(desserts.at(name).getBasePrice(),false);
                 desserts.erase(name);
-            else if (status == "main")
+            }
+            else if (status == "main"){
+                Menu::changeTotalPrice(mains.at(name).getBasePrice(),false);
                 mains.erase(name);
+            }
         }
         return 2;
     }
 
     // helper function
     string findInMaps(cs name) {
+        string result;
         if (drinks.find(name) == drinks.end() && desserts.find(name) == desserts.end() && mains.find(name) == mains.end())
-            return "nothing";
+            result = "nothing";
         else if (drinks.find(name) != drinks.end())
-            return "drink";
+            result = "drink";
         else if (desserts.find(name) != desserts.end())
-            return "dessert";
+            result = "dessert";
         else if (mains.find(name) != mains.end())
-            return "main";
+            result = "main";
+        return result;
     }
 };
 
