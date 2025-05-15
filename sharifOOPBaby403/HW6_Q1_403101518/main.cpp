@@ -11,7 +11,7 @@ protected:
     int step;
 
 public:
-    Food (int bp, cs n, int s) : basePrice(bp), name(n), step(s){}
+    Food (int bp, cs n, int s) : basePrice(bp), name(n), step(s) {}
 
     int getStep() {
         return step;
@@ -23,7 +23,9 @@ private:
     int volume;
 
 public:
-    Drink (int basePrice, cs name, int volume) : Food(basePrice,name,10), volume(volume) {}
+    Drink (int basePrice, cs name, int volume) : Food(basePrice,name,10), volume(volume) {
+        basePrice += volume/step;
+    }
 };
 
 class Dessert:public Food {
@@ -31,7 +33,9 @@ private:
     int calories;
 
 public:
-    Dessert (int basePrice, cs name, int calories) : Food(basePrice,name,50), calories(calories) {}
+    Dessert (int basePrice, cs name, int calories) : Food(basePrice,name,50), calories(calories) {
+        basePrice += calories/step;
+    }
 };
 
 class Main:public Food {
@@ -39,7 +43,9 @@ private:
     int weight;
 
 public:
-    Main (int basePrice, cs name, int weight) : Food(basePrice,name,20), weight(weight) {}
+    Main (int basePrice, cs name, int weight) : Food(basePrice,name,20), weight(weight) {
+        basePrice += weight/step;
+    }
 };
 
 // Controller
@@ -154,6 +160,8 @@ public:
                         break;
                 }
             }
+
+            // 
 
             // Sum
             else if (ussr[0] == "sum")
