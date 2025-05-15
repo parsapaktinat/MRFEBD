@@ -16,6 +16,10 @@ public:
     int getStep() {
         return step;
     }
+
+    int getBasePrice() {
+        return basePrice;
+    }
 };
 
 class Drink:public Food {
@@ -68,8 +72,7 @@ public:
         }
         Drink drink(price,name,volume);
         drinks.emplace(name,drink);
-        price += volume/drink.getStep();
-        Menu::changeTotalPrice(price,true);
+        Menu::changeTotalPrice(drink.getBasePrice(),true);
         return 2;
     }
 
@@ -80,19 +83,35 @@ public:
         }
         Dessert dessert(price,name,calories);
         desserts.emplace(name,dessert);
-        price += calories/dessert.getStep();
-        Menu::changeTotalPrice(price,true);
+        Menu::changeTotalPrice(dessert.getBasePrice(),true);
         return 2;
     }
 
+    // Add main
     int addMain(int price, cs name, int weight) {
         if (mains.find(name) != mains.end()) {
             return 1;
         }
         Main main(price,name,weight);
         mains.emplace(name,main);
-        price += weight/main.getStep();
-        Menu::changeTotalPrice(price,true);
+        Menu::changeTotalPrice(main.getBasePrice(),true);
+        return 2;
+    }
+
+    // Print final price
+    int printFinalPrice(cs name, int& price) {
+        if (drinks.find(name) == drinks.end() && desserts.find(name) == desserts.end() && mains.find(name) == mains.end()) {
+            return 1;
+        }
+        else if (drinks.find(name) != drinks.end()) {
+            price = drinks.at(name).getBasePrice();
+        }
+        else if (desserts.find(name) != desserts.end()) {
+            price = desserts.at(name).getBasePrice();
+        }
+        else if (mains.find(name) != mains.end()) {
+            price = mains.at(name).getBasePrice();
+        }
         return 2;
     }
 };
@@ -161,7 +180,22 @@ public:
                 }
             }
 
-            // 
+            // Print final price
+            else if (ussr[0] == "print" && ussr.size() == 2) {
+                string name = ussr[1];
+                int price = 0;
+                int status = menu.printFinalPrice(name,price);
+                switch (status) {
+                    case 1:
+                        cout << "Item doesn't exist." << endl;
+                        break;
+                    case 2:
+                        cout << name << ": " << price << endl;
+                        break;
+                }
+            }
+
+            
 
             // Sum
             else if (ussr[0] == "sum")
