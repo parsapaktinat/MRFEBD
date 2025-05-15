@@ -148,10 +148,10 @@ public:
                 switch (status) {
                     case 1:
                         cout << "Item already exists." << endl;
-                    break;
+                        break;
                     case 2:
                         cout << name << " added!" << endl;
-                    break;
+                        break;
                 }
             }
 
