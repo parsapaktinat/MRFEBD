@@ -6,19 +6,19 @@ using namespace std;
 // Model
 class Food {
 protected:
-    int basePrice;
+    int finalPrice;
     string name;
     int step;
 
 public:
-    Food (int bp, cs n, int s) : basePrice(bp), name(n), step(s) {}
+    Food (int bp, cs n, int s) : finalPrice(bp), name(n), step(s) {}
 
     int getStep() {
         return step;
     }
 
-    int getBasePrice() {
-        return basePrice;
+    int getfinalPrice() {
+        return finalPrice;
     }
 };
 
@@ -28,7 +28,7 @@ private:
 
 public:
     Drink (int bPrice, cs name, int v) : Food(bPrice,name,10), volume(v) {
-        basePrice += volume/step;
+        finalPrice += volume/step;
     }
 };
 
@@ -38,7 +38,7 @@ private:
 
 public:
     Dessert (int bPrice, cs name, int c) : Food(bPrice,name,50), calories(c) {
-        basePrice += calories/step;
+        finalPrice += calories/step;
     }
 };
 
@@ -48,7 +48,7 @@ private:
 
 public:
     Main (int bPrice, cs name, int w) : Food(bPrice,name,20), weight(w) {
-        basePrice += weight/step;
+        finalPrice += weight/step;
     }
 };
 
@@ -72,7 +72,7 @@ public:
         }
         Drink drink(price,name,volume);
         drinks.emplace(name,drink);
-        Menu::changeTotalPrice(drink.getBasePrice(),true);
+        Menu::changeTotalPrice(drink.getfinalPrice(),true);
         return 2;
     }
 
@@ -83,7 +83,7 @@ public:
         }
         Dessert dessert(price,name,calories);
         desserts.emplace(name,dessert);
-        Menu::changeTotalPrice(dessert.getBasePrice(),true);
+        Menu::changeTotalPrice(dessert.getfinalPrice(),true);
         return 2;
     }
 
@@ -94,7 +94,7 @@ public:
         }
         Main main(price,name,weight);
         mains.emplace(name,main);
-        Menu::changeTotalPrice(main.getBasePrice(),true);
+        Menu::changeTotalPrice(main.getfinalPrice(),true);
         return 2;
     }
 
@@ -105,11 +105,11 @@ public:
             return 1;
         else {
             if (status == "drink")
-                price = drinks.at(name).getBasePrice();
+                price = drinks.at(name).getfinalPrice();
             else if (status == "dessert")
-                price = desserts.at(name).getBasePrice();
+                price = desserts.at(name).getfinalPrice();
             else if (status == "main")
-                price = mains.at(name).getBasePrice();
+                price = mains.at(name).getfinalPrice();
         }
         return 2;
     }
@@ -121,15 +121,15 @@ public:
             return 1;
         else {
             if (status == "drink"){
-                Menu::changeTotalPrice(drinks.at(name).getBasePrice(),false);
+                Menu::changeTotalPrice(drinks.at(name).getfinalPrice(),false);
                 drinks.erase(name);
             }
             else if (status == "dessert"){
-                Menu::changeTotalPrice(desserts.at(name).getBasePrice(),false);
+                Menu::changeTotalPrice(desserts.at(name).getfinalPrice(),false);
                 desserts.erase(name);
             }
             else if (status == "main"){
-                Menu::changeTotalPrice(mains.at(name).getBasePrice(),false);
+                Menu::changeTotalPrice(mains.at(name).getfinalPrice(),false);
                 mains.erase(name);
             }
         }
