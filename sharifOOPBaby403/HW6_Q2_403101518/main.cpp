@@ -36,7 +36,7 @@ protected:
     Node Node2;
 
 public:
-    Component(cs name, Node node1, Node node2) : name(name), Node1(node1), Node2(node2) {}
+    Component(cs name, Node* node1, Node* node2) : name(name), Node1(node1), Node2(node2) {}
 
     Node getNode(int n) const {
         Node result;
@@ -55,7 +55,7 @@ class Resistor:public Component{
 private:
     double value;
 public:
-    Resistor(cs name, Node Node1, Node Node2,double value) : Component(name, Node1, Node2), value(value) {}
+    Resistor(cs name, Node* Node1, Node Node2*,double value) : Component(name, Node1, Node2), value(value) {}
 
     double getVoltage() const {}
     double getCurrent() const {}
@@ -65,7 +65,7 @@ class VoltageSource:public Component{
 private:
     double voltage;
 public:
-    VoltageSource(Node node1, Node node2 , double voltage) : Component("VIN", node1, node2), voltage(voltage) {}
+    VoltageSource(Node* node1, Node* node2 , double voltage) : Component("VIN", node1, node2), voltage(voltage) {}
 
     double getVoltage() const {return voltage;}
     double getCurrent() const {}
@@ -75,12 +75,15 @@ public:
 class Circuit{
 private:
     unordered_map<int, Component*> components;
-    unordered_map<string, Node> nodes;
+    vector<Component*> resistors;
+    vector<Component*> voltageSources;
+    unordered_map<string, Node*> nodes;
+    unordered_map<string, int> nodeIndexes;
 
 public:
     // Add node
     void addNode(cs name) {
-        Node newNode;
+        Node* newNode = new Node();
         nodes.emplace(name,newNode);
     }
 
@@ -88,12 +91,14 @@ public:
     void addResistor(double resVal, cs resName, cs node1Name, cs node2Name) {
         Component* newResistor = new Resistor(resName, nodes.at(node1Name), nodes.at(node2Name),resVal);
         components.emplace(1,newResistor);
+        resistors.emplace_back(newResistor);
     }
 
     // Add voltage source
     void addVoltageSource(double voltage, cs node1, cs node2) {
         Component* newVoltageSource = new VoltageSource(nodes.at(node1),nodes.at(node2),voltage);
         components.emplace(2,newVoltageSource);
+        voltageSources.emplace_back(newVoltageSource);
     }
 
     // Add ground
@@ -114,7 +119,8 @@ public:
         vector<vector<double>> A(n+m,vector<double>(n+m,0.0));
         for (auto component:components) {
             if (component.first == 1) {
-                vector<Node> tempNode = component.second->getNode();
+                Node tempNode1 = component.second->getNode(1);
+                Node tempNode2 = component.second->getNode(2);
 
             }
         }
@@ -122,8 +128,14 @@ public:
 
     // Destructor
     ~Circuit() {
-        for (auto component:components) {
-            delete component;
+        for (auto component:components)
+            delete component.second;
+        for (auto res:resistors)
+            delete res;
+        for (auto vol:voltageSources)
+            delete vol;
+        for (auto node:nodes) {
+            delete node.second;
         }
     }
 };
