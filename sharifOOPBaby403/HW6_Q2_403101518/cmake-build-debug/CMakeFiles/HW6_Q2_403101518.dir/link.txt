@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/HW6_Q2_403101518.dir/main.cpp.o -o HW6_Q2_403101518

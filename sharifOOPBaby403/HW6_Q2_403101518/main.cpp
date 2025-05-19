@@ -66,7 +66,7 @@ private:
 public:
     // Add node
     void addNode(cs name) {
-        Node newNode;
+        Node newNode();
         nodes.emplace(newNode);
     }
 
