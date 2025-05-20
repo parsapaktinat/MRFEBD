@@ -85,6 +85,7 @@ public:
     void addNode(cs name) {
         Node* newNode = new Node();
         nodes.emplace(name,newNode);
+        nodeIndexes.emplace(name,newNode->getNumber());
     }
 
     // Add resistor
@@ -104,10 +105,10 @@ public:
     // Add ground
     void addGround(cs nodeName) {
         int counter = 0;
-        nodes.at(nodeName).setGround();
+        nodes.at(nodeName)->setGround();
         for (auto &node:nodes) {
-            if (!node.second.getGround()) {
-                node.second.setNumberNode(counter++);
+            if (!node.second->getGround()) {
+                node.second->setNumberNode(counter++);
             }
         }
     }
