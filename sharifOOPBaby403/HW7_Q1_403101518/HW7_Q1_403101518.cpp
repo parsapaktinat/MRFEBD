@@ -9,6 +9,13 @@ public:
     }
 };
 
+class DoctorDontExistException : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Error: no doctor with this name exist";
+    }
+};
+
 class WeekdayExistException : public exception {
 public:
     const char* what() const noexcept override {
@@ -106,6 +113,7 @@ public:
     };
 
     void setWorkingDays(const vector<string> &days) {
+//        cout << "Hello" << endl;
         for (const string& x:days) {
             if (find(validDays.begin(),validDays.end(),x) == validDays.end())
                 throw WeekdayExistException();
@@ -200,8 +208,8 @@ bool inputHandler(string line) {
         string name = cp[7];
         int numberOfPatients = stoi(cp[9]);
 
-        if (doctors.count(name))
-            throw DoctorExistException();
+        if (doctors.count(name) == 0)
+            throw DoctorDontExistException();
 
         doctors.at(name).setMaxNPatient(numberOfPatients);
 
@@ -209,10 +217,10 @@ bool inputHandler(string line) {
     }
 
     // Change the working days
-    else if (cp[0] == "change" && cp[1] == "the" && cp[2] == "working" && cp.size() == 9) {
+    else if (cp[0] == "change" && cp[1] == "the" && cp[2] == "working") {
         string name = cp[6];
         vector<string> workingDays;
-        for (int i = 7;i < cp.size();i++) {
+        for (int i = 8 ;i < cp.size();i++) {
             workingDays.push_back(cp[i]);
         }
 
@@ -236,10 +244,10 @@ bool inputHandler(string line) {
             throw DoctorsSpecialtyExist();
 
         string weekday;
-        if (doctors.at(name).hasCapacity(weekday,name)) {
+        if (doctors.at(doctorName).hasCapacity(weekday,name)) {
             Patient newPatient(name,doctorName,weekday);
             patients.emplace(name,newPatient);
-            cout << "appointment set on day " << weekday << " doctor " << name << endl;
+            cout << "appointment set on day " << weekday << " doctor " << doctorName << endl;
         }
         else
             throw BusyDoctorsInDay();
