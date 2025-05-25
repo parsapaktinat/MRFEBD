@@ -30,10 +30,24 @@ public:
     }
 };
 
+class BusyDoctorsInDay : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Error: doctors with this specialty are busy";
+    }
+};
+
+class PatientNameException : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Error: no patient with this name exist";
+    }
+};
+
 // ------------- your code goes here ----------------
 class Doctor;
 class Patient;
-string findDoctorWithSpecialty(const string &specialty);
+string findDoctorWithSpecialty(const string &specialty, bool &found);
 
 vector<string> validDays;
 map<string, Doctor> doctors;
@@ -47,7 +61,8 @@ private:
     string day;
 
 public:
-    Patient() {}
+    Patient(const string &_name, const string & _doctorName, const string & _day) : name(_name), doctorName(_doctorName)
+    , day(_day) {}
 
     string getDay() const {
         return day;
@@ -119,6 +134,21 @@ public:
 
     int getMaxNPatient() const {
         return maxNPatient;
+    }
+
+    void deletePatient(string &docName, const string &patName, string &weekday) {
+
+    }
+
+    bool hasCapacity(string &weekday, const string &name) {
+        for (auto &day:workingDays) {
+            if (schedule[day].size() < maxNPatient) {
+                schedule[day].push_back(name);
+                weekday = day;
+                return true;
+            }
+        }
+        return false;
     }
 
     void setMaxNPatient(int maxNPatient) {
@@ -196,23 +226,32 @@ bool inputHandler(string line) {
         string specialty = cp[3];
 
         bool found = false;
-        string doctorName;
-        for (auto &doctor:doctors) {
-            if (doctor.second.getSpecialty() == specialty) {
-                doctorName = doctor.first;
-                found = true;
-
-            }
-        }
+        string doctorName = findDoctorWithSpecialty(specialty, found);
 
         if (!found)
             throw DoctorsSpecialtyExist();
 
-        string weekday = doctorname
-
-        cout << " appointment set on day " << weekday << " doctor " << name << endl;
+        string weekday;
+        if (doctors.at(name).hasCapacity(weekday,name)) {
+            Patient newPatient(name,doctorName,weekday);
+            patients.emplace(name,newPatient);
+            cout << "appointment set on day " << weekday << " doctor " << name << endl;
+        }
+        else
+            throw BusyDoctorsInDay();
     }
 
+    // Delete patient
+    else if (cp[0] == "delete" && cp[1] == "patient" && cp.size() == 3) {
+        string name = cp[2];
+
+        if (patients.count(name) == 0)
+            throw PatientNameException();
+
+
+    }
+
+    // exit
     else if (cp[0] == "exit")
         return false;
 
@@ -235,9 +274,8 @@ int main() {
     return 0;
 }
 
-string findDoctorWithSpecialty(const string &specialty) {
+string findDoctorWithSpecialty(const string &specialty, bool &found) {
     string name1, name2;
-    bool found = false;
     for (auto &[name,doctor]:doctors) {
         if (doctor.getSpecialty() == specialty) {
             if (!found) {
