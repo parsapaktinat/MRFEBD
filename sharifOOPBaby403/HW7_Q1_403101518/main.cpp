@@ -12,6 +12,18 @@ public:
 };
 
 // ------------- your code goes here ----------------
+class Patient{
+private:
+    string name;
+    string doctorName;
+    string day;
+
+public:
+    Patient() {}
+
+    
+};
+
 class Doctor {
 private:
     string name;
@@ -31,26 +43,6 @@ public:
 class HospitalController {
 private:
     vector<Doctor> doctors;
-
-public:
-    // Add doctor
-    int addDoctor(cs name, cs specialty, int numberOfPatients, vector<string> &workingDays) {
-        int i = -1;
-        if (findNameOfDoctor(i, name)) {
-
-        }
-    }
-
-    // Helper functions
-    bool findNameOfDoctor(int &i, cs name) {
-        for (int j = 0;j < doctors.size();j++) {
-            if (doctors[j].getName() == name) {
-                i = j;
-                return true;
-            }
-        }
-        return false;
-    }
 };
 
 bool inputHandler(string line, HospitalController &c) {
@@ -70,7 +62,6 @@ bool inputHandler(string line, HospitalController &c) {
         for (int i = 5;i < cp.size();i++) {
             workingDays.push_back(cp[i]);
         }
-
     }
 
 }
