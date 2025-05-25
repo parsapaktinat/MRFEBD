@@ -49,10 +49,11 @@ class Doctor;
 class Patient;
 string findDoctorWithSpecialty(const string &specialty, bool &found);
 
-vector<string> validDays;
+vector<string> validDays = {"saturday", "sunday", "monday", "tuesday", "wednesday"};
 map<string, Doctor> doctors;
 vector<string> doctorOrder;
 map<string, Patient> patients;
+vector<string> patientOrder;
 
 class Patient{
 private:
@@ -136,8 +137,11 @@ public:
         return maxNPatient;
     }
 
-    void deletePatient(string &docName, const string &patName, string &weekday) {
-
+    void deletePatient(const string &patName, string &weekday) {
+        weekday = patients.at(patName).getDay();
+        patients.erase(patName);
+        auto it = find(schedule[weekday].begin(), schedule[weekday].end(),patName);
+        schedule[weekday].erase(it);
     }
 
     bool hasCapacity(string &weekday, const string &name) {
@@ -181,7 +185,7 @@ bool inputHandler(string line) {
             workingDays.push_back(cp[i]);
         }
 
-        if (doctors.count(name))
+        if (doctors.count(name) == 1)
             throw DoctorExistException();
 
         Doctor newDoctor(name,specialty,maxNPatients,workingDays);
@@ -248,7 +252,20 @@ bool inputHandler(string line) {
         if (patients.count(name) == 0)
             throw PatientNameException();
 
+        string weekday, docName = patients.at(name).getDoctorName();
+        doctors.at(docName).deletePatient(name,weekday);
+        cout << "appointment deleted on day " << weekday << " doctor " << name << endl;
+    }
 
+    // Patients list
+    else if (cp[0] == "patients" && cp[1] == "list") {
+        for (auto day : {"saturday", "sunday", "monday", "tuesday", "wednesday"}) {
+            cout << day << ":\n";
+            int i = 0;
+//            for () {
+
+//            }
+        }
     }
 
     // exit
