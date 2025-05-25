@@ -23,6 +23,13 @@ public:
     }
 };
 
+class DoctorsSpecialtyExist : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Error: no doctor for this problem exist";
+    }
+};
+
 // ------------- your code goes here ----------------
 class Doctor;
 class Patient;
@@ -87,6 +94,10 @@ public:
                 throw WeekdayExistException();
         }
         workingDays = vector<string>(days.begin(),days.end());
+        for (auto &[day, patients]:schedule) {
+            if (find(workingDays.begin(), workingDays.end(), day) == workingDays.end())
+                schedule.erase(day);
+        }
     }
 
     string getName() const {
@@ -176,6 +187,23 @@ bool inputHandler(string line) {
         doctors.at(name).setWorkingDays(workingDays);
 
         cout << "working days changed" << endl;
+    }
+
+    // Add patients
+    else if (cp[0] == "add" && cp[1] == "patient" && cp.size() == 4) {
+        string name = cp[2];
+        string specialty = cp[3];
+
+        bool found = false;
+        string doctorName;
+        for (auto &doctor:doctors) {
+            if (doctor.second.getSpecialty() == specialty) {
+                doctorName = doctor.first;
+                found = true;
+            }
+        }
+
+        if ()
     }
 }
 
