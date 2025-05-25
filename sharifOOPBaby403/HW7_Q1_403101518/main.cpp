@@ -33,6 +33,7 @@ public:
 // ------------- your code goes here ----------------
 class Doctor;
 class Patient;
+string findDoctorWithSpecialty(const string &specialty);
 
 vector<string> validDays;
 map<string, Doctor> doctors;
@@ -200,11 +201,22 @@ bool inputHandler(string line) {
             if (doctor.second.getSpecialty() == specialty) {
                 doctorName = doctor.first;
                 found = true;
+
             }
         }
 
-        if ()
+        if (!found)
+            throw DoctorsSpecialtyExist();
+
+        string weekday = doctorname
+
+        cout << " appointment set on day " << weekday << " doctor " << name << endl;
     }
+
+    else if (cp[0] == "exit")
+        return false;
+
+    return true;
 }
 
 // ------ do not change main() function ------
@@ -221,4 +233,25 @@ int main() {
         }
     }
     return 0;
+}
+
+string findDoctorWithSpecialty(const string &specialty) {
+    string name1, name2;
+    bool found = false;
+    for (auto &[name,doctor]:doctors) {
+        if (doctor.getSpecialty() == specialty) {
+            if (!found) {
+                name1 = name;
+                found = true;
+            }
+            else {
+                name2 = name;
+                auto it1 = find(doctorOrder.begin(), doctorOrder.end(), name1);
+                auto it2 = find(doctorOrder.begin(), doctorOrder.end(), name2);
+                if (it2 < it1)
+                    name1 = name2;
+            }
+        }
+    }
+    return name1;
 }
