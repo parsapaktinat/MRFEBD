@@ -25,6 +25,12 @@ public:
 
 // ------------- your code goes here ----------------
 class Doctor;
+class Patient;
+
+vector<string> validDays;
+map<string, Doctor> doctors;
+vector<string> doctorOrder;
+map<string, Patient> patients;
 
 class Patient{
 private:
@@ -60,26 +66,13 @@ public:
     }
 };
 
-class HospitalController {
-public:
-    static vector<string> validDays;
-    static map<string, Doctor> doctors;
-    static vector<string> doctorOrder;
-    static map<string, Patient> patients;
-};
-
-vector<string> HospitalController::validDays;
-map<string, Doctor> HospitalController::doctors;
-vector<string> HospitalController::doctorOrder;
-map<string, Patient> HospitalController::patients;
-
 class Doctor {
 private:
     string name;
     string specialty;
     int maxNPatient;
     vector<string> workingDays;
-    unordered_map<string, vector<string>> schedule;
+    unordered_map<string, vector<string>> schedule; // 1. Day - 2. Patient names
 
 public:
     Doctor(string _name, string _specialty, int _maxNPatient, const vector<string> &_workingDays) :
@@ -90,7 +83,7 @@ public:
 
     void setWorkingDays(const vector<string> &days) {
         for (const string& x:days) {
-            if (find(HospitalController::validDays.begin(),HospitalController::validDays.end(),x) == HospitalController::validDays.end())
+            if (find(validDays.begin(),validDays.end(),x) == validDays.end())
                 throw WeekdayExistException();
         }
         workingDays = vector<string>(days.begin(),days.end());
@@ -119,6 +112,11 @@ public:
     void setMaxNPatient(int maxNPatient) {
         if (maxNPatient < 0)
             throw NegativeMaxNPatientException();
+
+        for (auto &[day,patients]:schedule) {
+            if (patients.size() > maxNPatient)
+                patients.resize(maxNPatient);
+        }
         this->maxNPatient = maxNPatient;
     }
 };
@@ -134,21 +132,51 @@ bool inputHandler(string line) {
     // Add doctor
     if (cp[0] == "add" && cp[1] == "doctor" && cp.size() >= 6) {
         string name = cp[2];
-        if (HospitalController::doctors.count(name))
-            throw DoctorExistException();
-
         string specialty = cp[3];
         int maxNPatients = stoi(cp[4]);
         vector<string> workingDays;
         for (int i = 5;i < cp.size();i++) {
             workingDays.push_back(cp[i]);
         }
+
+        if (doctors.count(name))
+            throw DoctorExistException();
+
         Doctor newDoctor(name,specialty,maxNPatients,workingDays);
-        HospitalController::doctors.emplace(name, newDoctor);
-        HospitalController::doctorOrder.push_back(name);
+        doctors.emplace(name, newDoctor);
+        doctorOrder.push_back(name);
+
         cout << "doctor " << name << " added with specialty " << specialty << " with " << maxNPatients << " patients" << endl;
     }
 
+    // Change the number of patients of the doctor
+    else if (cp[0] == "change" && cp[1] == "the" && cp[2] == "number" && cp.size() == 10) {
+        string name = cp[7];
+        int numberOfPatients = stoi(cp[9]);
+
+        if (doctors.count(name))
+            throw DoctorExistException();
+
+        doctors.at(name).setMaxNPatient(numberOfPatients);
+
+        cout << "number of patients changed" << endl;
+    }
+
+    // Change the working days
+    else if (cp[0] == "change" && cp[1] == "the" && cp[2] == "working" && cp.size() == 9) {
+        string name = cp[6];
+        vector<string> workingDays;
+        for (int i = 7;i < cp.size();i++) {
+            workingDays.push_back(cp[i]);
+        }
+
+        if (doctors.count(name) == 0)
+            throw DoctorExistException();
+
+        doctors.at(name).setWorkingDays(workingDays);
+
+        cout << "working days changed" << endl;
+    }
 }
 
 // ------ do not change main() function ------
