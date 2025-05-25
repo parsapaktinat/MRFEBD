@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define cs const string &
-
 // ------------- Exception example ------------------
 class NameException : public exception {
 public:
@@ -21,29 +19,78 @@ private:
 public:
     Patient() {}
 
-    
+    string getDay() const {
+        return day;
+    }
+
+    string getDoctorName() const {
+        return doctorName;
+    }
+
+    string getName() const {
+        return name;
+    }
+
+    void setName(const string &name) {
+        this->name = name;
+    }
+
+    void setDay(const string &day) {
+        this->day = day;
+    }
+
+    void setDoctorName(const string &doctorName) {
+        this->doctorName = doctorName;
+    }
 };
 
 class Doctor {
 private:
     string name;
     string specialty;
-    int numberOfPatients;
+    int maxNPatient;
     vector<string> workingDays;
+    unordered_map<string, vector<string>> schedule;
 
 public:
-    Doctor(cs _name, cs _specialty, int _numberOfPatients, const vector<string> &_workingDays) : name(_name), specialty(_specialty), numberOfPatients(_numberOfPatients), workingDays(_workingDays) {};
+    Doctor(string _name, string _specialty, int _maxNPatient, const vector<string> &_workingDays) :
+    name(_name), specialty(_specialty) {
 
-    string getName() const {return name;}
-    string getSpecialty() const {return specialty;}
-    int getNumberOfPatients() const {return numberOfPatients;}
-    vector<string> getWorkingDays() const {return workingDays;}
+    };
+
+    void setWorkingDays(const vector<string> &days) {
+
+    }
+
+    string getName() const {
+        return name;
+    }
+
+    void setName(const string &name) {
+        this->name = name;
+    }
+
+    string getSpecialty() const {
+        return specialty;
+    }
+
+    void setSpecialty(const string &specialty) {
+        this->specialty = specialty;
+    }
 };
 
 class HospitalController {
 private:
-    vector<Doctor> doctors;
+    static vector<string> validDays;
+    static map<string, Doctor> doctors;
+    static vector<string> doctorOrder;
+    static map<string, Patient> patients;
 };
+
+vector<string> HospitalController::validDays;
+map<string, Doctor> HospitalController::doctors;
+vector<string> HospitalController::doctorOrder;
+map<string, Patient> HospitalController::patients;
 
 bool inputHandler(string line, HospitalController &c) {
     string word;
@@ -62,6 +109,7 @@ bool inputHandler(string line, HospitalController &c) {
         for (int i = 5;i < cp.size();i++) {
             workingDays.push_back(cp[i]);
         }
+
     }
 
 }
