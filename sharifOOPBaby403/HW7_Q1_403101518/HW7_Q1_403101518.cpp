@@ -79,22 +79,6 @@ public:
     string getDoctorName() const {
         return doctorName;
     }
-
-    string getName() const {
-        return name;
-    }
-
-    void setName(const string &name) {
-        this->name = name;
-    }
-
-    void setDay(const string &day) {
-        this->day = day;
-    }
-
-    void setDoctorName(const string &doctorName) {
-        this->doctorName = doctorName;
-    }
 };
 
 class Doctor {
@@ -113,43 +97,43 @@ public:
     };
 
     void setWorkingDays(const vector<string> &days) {
-//        cout << "Hello" << endl;
         for (const string& x:days) {
             if (find(validDays.begin(),validDays.end(),x) == validDays.end())
                 throw WeekdayExistException();
         }
-        workingDays = vector<string>(days.begin(),days.end());
-        for (auto &[day, patients]:schedule) {
-            if (find(workingDays.begin(), workingDays.end(), day) == workingDays.end())
-                schedule.erase(day);
+
+        vector<string> oldDays;
+        for (const string &day:workingDays) {
+            if (find(days.begin(), days.end(), day) == days.end()) {
+                oldDays.push_back(day);
+            }
         }
-    }
 
-    string getName() const {
-        return name;
-    }
+        for (const string &day:oldDays) {
+            for (const string &patName:schedule.at(day)) {
+                patients.erase(patName);
+                patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
+            }
+            schedule.erase(day);
+        }
 
-    void setName(const string &name) {
-        this->name = name;
+        workingDays = vector<string>(days.begin(),days.end());
     }
 
     string getSpecialty() const {
         return specialty;
     }
 
-    void setSpecialty(const string &specialty) {
-        this->specialty = specialty;
-    }
-
-    int getMaxNPatient() const {
-        return maxNPatient;
-    }
-
     void deletePatient(const string &patName, string &weekday) {
-        weekday = patients.at(patName).getDay();
-        patients.erase(patName);
-        auto it = find(schedule[weekday].begin(), schedule[weekday].end(),patName);
-        schedule[weekday].erase(it);
+        for (auto &[day, p] : schedule) {
+            if (find(p.begin(),p.end(),patName) != p.end()) {
+                weekday = day;
+                p.erase(remove(p.begin(), p.end(), patName), p.end());
+                patients.erase(patName);
+                patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
+                return;
+            }
+        }
     }
 
     bool hasCapacity(string &weekday, const string &name) {
@@ -167,11 +151,7 @@ public:
         if (maxNPatient < 0)
             throw NegativeMaxNPatientException();
 
-        for (auto &[day,patients]:schedule) {
-            if (patients.size() > maxNPatient)
-                patients.resize(maxNPatient);
-        }
-        this->maxNPatient = maxNPatient;
+        
     }
 };
 
@@ -247,6 +227,7 @@ bool inputHandler(string line) {
         if (doctors.at(doctorName).hasCapacity(weekday,name)) {
             Patient newPatient(name,doctorName,weekday);
             patients.emplace(name,newPatient);
+            patientOrder.push_back(name);
             cout << "appointment set on day " << weekday << " doctor " << doctorName << endl;
         }
         else
