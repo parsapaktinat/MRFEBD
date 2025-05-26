@@ -151,7 +151,16 @@ public:
         if (maxNPatient < 0)
             throw NegativeMaxNPatientException();
 
-        
+        for (auto & [day , p]:schedule) {
+            while (p.size() > maxNPatient) {
+                string patName = p.back();
+                p.pop_back();
+                patients.erase(patName);
+                patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
+            }
+        }
+
+        this->maxNPatient = maxNPatient;
     }
 };
 
@@ -250,10 +259,13 @@ bool inputHandler(string line) {
     else if (cp[0] == "patients" && cp[1] == "list") {
         for (auto day : {"saturday", "sunday", "monday", "tuesday", "wednesday"}) {
             cout << day << ":\n";
-            int i = 0;
-//            for () {
 
-//            }
+            int i = 0;
+            for (const string & name:patientOrder) {
+                if (patients.at(name).getDay() == day) {
+                    cout << "patient" << ++i << " " << name << " : doctor " << patients.at(name).getDoctorName() << endl;
+                }
+            }
         }
     }
 
