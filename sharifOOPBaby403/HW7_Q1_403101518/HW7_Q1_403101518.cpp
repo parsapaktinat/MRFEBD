@@ -51,6 +51,12 @@ public:
     }
 };
 
+class InvalidCommandException : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Error: invalid command";
+    }
+};
 // ------------- your code goes here ----------------
 class Doctor;
 class Patient;
@@ -110,7 +116,7 @@ public:
         }
 
         for (const string &day:oldDays) {
-            for (const string &patName:schedule.at(day)) {
+            for (const string &patName:schedule[day]) {
                 patients.erase(patName);
                 patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
             }
@@ -272,6 +278,9 @@ bool inputHandler(string line) {
     // exit
     else if (cp[0] == "exit")
         return false;
+
+    else
+        throw InvalidCommandException();
 
     return true;
 }
