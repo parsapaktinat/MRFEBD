@@ -101,94 +101,9 @@
       <workItem from="1747772322750" duration="758000" />
       <workItem from="1748189057071" duration="31000" />
     </task>
-    <task id="LOCAL-00001" summary="Ptient class added.">
-      <option name="closed" value="true" />
-      <created>1748173174122</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1748173174122</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Some good containers and some getter and setter functions added to Patient and Doctor class.">
-      <option name="closed" value="true" />
-      <created>1748174266235</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1748174266235</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Number of patients change added.">
-      <option name="closed" value="true" />
-      <created>1748186366229</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1748186366229</updated>
-    </task>
-    <task id="LOCAL-00004" summary="&quot;Change working days&quot; added.">
-      <option name="closed" value="true" />
-      <created>1748187387427</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1748187387427</updated>
-    </task>
-    <task id="LOCAL-00005" summary="&quot;Add patient&quot; added.">
-      <option name="closed" value="true" />
-      <created>1748193328723</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1748193328723</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Debugging.">
-      <option name="closed" value="true" />
-      <created>1748202766694</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1748202766694</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Name changed to be aploaded in quera.">
-      <option name="closed" value="true" />
-      <created>1748205642895</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1748205642895</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Invalid command exception added. Debbuging done successfully. ready for upload in quera.">
-      <option name="closed" value="true" />
-      <created>1748282566237</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1748282566237</updated>
-    </task>
-    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VCPKGProject">
-    <isAutomaticCheckingOnLaunch value="false" />
-    <isAutomaticFoundErrors value="true" />
-    <isAutomaticReloadCMake value="true" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Ptient class added." />
-    <MESSAGE value="Some good containers and some getter and setter functions added to Patient and Doctor class." />
-    <MESSAGE value="Number of patients change added." />
-    <MESSAGE value="&quot;Change working days&quot; added." />
-    <MESSAGE value="&quot;Add patient&quot; added." />
-    <MESSAGE value="Debugging." />
-    <MESSAGE value="Name changed to be aploaded in quera." />
-    <MESSAGE value="Invalid command exception added. Debbuging done successfully. ready for upload in quera." />
-    <option name="LAST_COMMIT_MESSAGE" value="Invalid command exception added. Debbuging done successfully. ready for upload in quera." />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>

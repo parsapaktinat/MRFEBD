@@ -3,9 +3,9 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="CMakePresetLoader">{
-  &quot;useNewFormat&quot;: true
-}</component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
   <component name="CMakeProjectFlavorService">
     <option name="flavorId" value="CMakePlainProjectFlavor" />
   </component>
@@ -14,7 +14,7 @@
   </component>
   <component name="CMakeRunConfigurationManager">
     <generated>
-      <config projectName="Q7_q1_403101518" targetName="Q7_q1_403101518" />
+      <config projectName="HW7_Q1_403101518" targetName="HW7_Q1_403101518" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -23,10 +23,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b4bc01d-3ae0-4c7d-9766-88951a6e6759" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../HW7_Q1_403101518/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../HW7_Q1_403101518/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+    <list default="true" id="ce31d468-ed2c-4ae6-b762-52f0cb829604" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../HW6_Q2_403101518/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../HW6_Q2_403101518/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,38 +38,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;parsapaktinat&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;git@github.com:parsapaktinat/MRFEBD.git&quot;,
-    &quot;accountId&quot;: &quot;9a5f44ed-464f-47ed-b366-d840b63c5dfd&quot;
-  }
-}</component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Q6_q1_403101518.cpp" root0="FORCE_HIGHLIGHTING" />
-  </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
     <option name="majorVersion" value="2024" />
     <option name="minorVersion" value="2.1" />
     <option name="productBranch" value="Classic" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
-}</component>
-  <component name="ProjectId" id="2xY9Ee9wkYJUFOvKSej4ZZQbIwc" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2xNIsbmj2dEEPMAGNk5BjzXoY1s" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "CMake Application.Q7_q1_403101518.executor": "Run",
     "RunOnceActivity.RadMigrateCodeStyle": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
@@ -79,7 +61,6 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "hw7q1",
-    "last_opened_file_path": "C:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW7_Q1_403101518",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -89,7 +70,12 @@
   }
 }]]></component>
   <component name="RunManager">
-    <configuration name="Q7_q1_403101518" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Q7_q1_403101518" TARGET_NAME="Q7_q1_403101518" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Q7_q1_403101518" RUN_TARGET_NAME="Q7_q1_403101518">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HW7_Q1_403101518" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="HW7_Q1_403101518" TARGET_NAME="HW7_Q1_403101518" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="HW7_Q1_403101518" RUN_TARGET_NAME="HW7_Q1_403101518">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -98,22 +84,16 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9b4bc01d-3ae0-4c7d-9766-88951a6e6759" name="Changes" comment="" />
-      <created>1748104030765</created>
+      <changelist id="ce31d468-ed2c-4ae6-b762-52f0cb829604" name="Changes" comment="" />
+      <created>1747772313233</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1748104030765</updated>
-      <workItem from="1748104038624" duration="4319000" />
-      <workItem from="1748189012263" duration="76000" />
+      <updated>1747772313233</updated>
+      <workItem from="1747772322750" duration="758000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VCPKGProject">
-    <isAutomaticCheckingOnLaunch value="false" />
-    <isAutomaticFoundErrors value="true" />
-    <isAutomaticReloadCMake value="true" />
   </component>
 </project>
