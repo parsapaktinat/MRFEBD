@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define cs const string &
+
 // ------------- Exception example ------------------
 class DoctorExistException : public exception {
 public:
@@ -93,19 +95,48 @@ private:
     string specialty;
     int maxNPatient;
     vector<string> workingDays;
-    unordered_map<string, vector<string>> schedule; // 1. Day - 2. Patient names
+    unordered_map<string, vector<string>> schedule; // 1. Day  2. Patient names
 
 public:
-    Doctor(string _name, string _specialty, int _maxNPatient, const vector<string> &_workingDays) :
-    name(_name), specialty(_specialty) {
-        setWorkingDays(_workingDays);
-        setMaxNPatient(_maxNPatient);
+    Doctor(cs _name, cs _specialty, int _maxNPatient, const vector<string> &_workingDays) :
+    name(_name), specialty(_specialty), workingDays(_workingDays) {
+        if (maxNPatient < 0) {
+            throw NegativeMaxNPatientException();
+        }
+
+        for (const auto &day:workingDays) {
+            if (!isValidDay(day)) {
+                throw WeekdayExistException();
+            }
+        }
     };
 
+    string getSpecialty() const {return specialty;}
+    string getName() const {return name;}
+
+    static bool isValidDay(cs day) {
+        vector<string> validDays = {"saturday", "sunday", "monday", "tuesday", "wednesday"};
+        return find(validDays.begin(), validDays.end(), day) != validDays.end();
+    }
+
+    void setMaxNPatient(int maxNPatient) {
+        if (maxNPatient < 0)
+            throw NegativeMaxNPatientException();
+
+        for (auto &dayAppointment : schedule) {
+            if (dayAppointment.second.size() > maxNPatient) {
+                dayAppointment.second.resize(maxNPatient);
+            }
+        }
+
+        this->maxNPatient = maxNPatient;
+    }
+
     void setWorkingDays(const vector<string> &days) {
-        for (const string& x:days) {
-            if (find(validDays.begin(),validDays.end(),x) == validDays.end())
+        for (cs day : days) {
+            if (!isValidDay(day)) {
                 throw WeekdayExistException();
+            }
         }
 
         vector<string> oldDays;
@@ -116,57 +147,130 @@ public:
         }
 
         for (const string &day:oldDays) {
-            for (const string &patName:schedule[day]) {
-                patients.erase(patName);
-                patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
-            }
             schedule.erase(day);
         }
 
-        workingDays = vector<string>(days.begin(),days.end());
+        workingDays = days;
     }
 
-    string getSpecialty() const {
-        return specialty;
+    bool hasCapacity(cs day) const {
+        auto it = schedule.find(day);
+        if (it == schedule.end() && (find(workingDays.begin(), workingDays.end(), day) != workingDays.end())) {
+            return true;
+        }
+        else if (find(workingDays.begin(), workingDays.end(), day) == workingDays.end())
+            return false;
+        return it->second.size() < maxNPatient;
     }
 
-    void deletePatient(const string &patName, string &weekday) {
-        for (auto &[day, p] : schedule) {
-            if (find(p.begin(),p.end(),patName) != p.end()) {
-                weekday = day;
-                p.erase(remove(p.begin(), p.end(), patName), p.end());
-                patients.erase(patName);
-                patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
-                return;
-            }
+    void addAppointment(cs patientName, cs day) {
+        schedule[day].push_back(patientName);
+    }
+
+    void removeAppointment(cs patientName) {
+        for (auto &pair : schedule) {
+            auto it = find(pair.second.begin(), pair.second.end(), patientName);
+            pair.second.erase(it);
+            return;
         }
     }
+};
 
-    bool hasCapacity(string &weekday, const string &name) {
-        for (auto &day:workingDays) {
-            if (schedule[day].size() < maxNPatient) {
-                schedule[day].push_back(name);
-                weekday = day;
-                return true;
-            }
-        }
-        return false;
+class HospitalSystem {
+private:
+    // map<string, Doctor> doctors;
+    vector<Doctor> doctorsOrder;
+    map<string, pair<string, string>> patients; // name -> (doctor name, day)
+
+public:
+    // Add doctor
+    void addDoctor(cs name, cs specialty, int maxNPatient, const vector<string> &workingDays) {
+        if (doctors.find(name) != doctors.end())
+            throw DoctorExistException(); 
+
+        // doctors.emplace(name, Doctor(name, specialty, maxNPatient, workingDays));
+        doctorsOrder.push_back(Doctor(name, specialty, maxNPatient, workingDays));
     }
 
-    void setMaxNPatient(int maxNPatient) {
-        if (maxNPatient < 0)
-            throw NegativeMaxNPatientException();
-
-        for (auto & [day , p]:schedule) {
-            while (p.size() > maxNPatient) {
-                string patName = p.back();
-                p.pop_back();
-                patients.erase(patName);
-                patientOrder.erase(remove(patientOrder.begin(), patientOrder.end(), patName), patientOrder.end());
+    // Change max number of patients
+    void changeDoctorMaxPatient(cs name, int maxP) {
+        int index = -1;
+        for (int i = 0;i < doctorsOrder.size();i++) {
+            if (doctorsOrder[i].getName() == name) {
+                index = i;
+                break;
             }
         }
 
-        this->maxNPatient = maxNPatient;
+        if (index < 0) 
+            throw DoctorDontExistException();
+
+        doctorsOrder[index].setMaxNPatient(maxP);
+    }
+
+    // change working days
+    void changeWorkingDays(cs name, const vector<string> & newWorkingDays) {
+        int index = -1;
+        for (int i = 0;i < doctorsOrder.size();i++) {
+            if (doctorsOrder[i].getName() == name) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index < 0) 
+            throw DoctorDontExistException();
+
+        doctorsOrder[index].setWorkingDays(newWorkingDays);
+    }
+
+    // Add patient
+    string addPatient(const string& patientName, const string& specialty) {
+        vector<Doctor*> matchingDoctors;
+        for (auto& doctor : doctorsOrder) {
+            if (doctor.getSpecialty() == specialty) {
+                matchingDoctors.push_back(&doctor);
+            }
+        }
+        
+        if (matchingDoctors.empty()) {
+            throw DoctorsSpecialtyExist();
+        }
+        
+        vector<string> daysOrder = {"saturday", "sunday", "monday", "tuesday", "wednesday"};
+        
+        for (auto day : daysOrder) {
+            for (auto doctor : matchingDoctors) {
+                if (doctor->hasCapacity(day)) {
+                    doctor->addAppointment(patientName, day);
+                    patients[patientName] = make_pair(doctor->getName(), day);
+                    return day;
+                }
+            }
+        }
+        
+        throw BusyDoctorsInDay();
+    }
+
+    // Delete patient
+    string deletePatient(cs patientName) {
+        auto it = patients.find(patientName);
+        if (it == patients.end())
+            throw PatientNameException();
+
+        string docName = it->second.first;
+        string day = it->second.second;
+
+        int index = -1;
+        for (int i = 0;i < doctorsOrder.size();i++) {
+            if (doctorsOrder[i].getName() == docName) {
+                index = i;
+                break;
+            }
+        }
+
+        doctorsOrder[index].removeAppointment();
+        return day;
     }
 };
 
