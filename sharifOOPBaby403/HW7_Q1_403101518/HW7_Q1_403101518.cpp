@@ -83,7 +83,12 @@ public:
         }
 
         maxNPatient = _maxNPatient;
-        setWorkingDays(_workingDays);
+        workingDays = _workingDays;
+        for (auto &day:workingDays) {
+            if (schedule.count(day) == 0) {
+                schedule.insert({day, {}});
+            }
+        }
     };
 
     string getSpecialty() const {return specialty;}
@@ -107,7 +112,7 @@ public:
         maxNPatient = _maxNPatient;
     }
 
-    void setWorkingDays(const vector<string> &days) {
+    void setWorkingDays(const vector<string> &days, vector<string> & deletedPatients) {
         for (cs day : days) {
             if (!isValidDay(day)) {
                 throw WeekdayExistException();
@@ -122,6 +127,8 @@ public:
         }
 
         for (const string &day:oldDays) {
+            for (string & name : schedule[day])
+                deletedPatients.push_back(name);
             schedule.erase(day);
         }
 
@@ -220,7 +227,17 @@ public:
         if (index < 0)
             throw DoctorDontExistException();
 
-        doctorsOrder[index].setWorkingDays(newWorkingDays);
+        vector<string> deletedPatients;
+        doctorsOrder[index].setWorkingDays(newWorkingDays,deletedPatients);
+
+        for (auto it = patientsOrder.begin(); it != patientsOrder.end();) {
+            if (find(deletedPatients.begin(), deletedPatients.end(), it->getName()) != deletedPatients.end()) {
+                it = patientsOrder.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
     }
 
     // Add patient
