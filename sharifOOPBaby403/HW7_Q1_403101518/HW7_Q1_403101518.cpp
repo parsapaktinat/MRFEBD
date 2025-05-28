@@ -76,7 +76,7 @@ public:
             throw NegativeMaxNPatientException();
         }
 
-        for (const auto &day:workingDays) {
+        for (const auto &day:_workingDays) {
             if (!isValidDay(day)) {
                 throw WeekdayExistException();
             }
@@ -99,12 +99,15 @@ public:
         return find(validDays.begin(), validDays.end(), day) != validDays.end();
     }
 
-    void setMaxNPatient(int _maxNPatient) {
+    void setMaxNPatient(int _maxNPatient, vector<string> & deletedPatients) {
         if (_maxNPatient < 0)
             throw NegativeMaxNPatientException();
 
         for (auto &dayAppointment : schedule) {
             if (dayAppointment.second.size() > _maxNPatient) {
+                for (int i = _maxNPatient;i < dayAppointment.second.size();i++) {
+                    deletedPatients.push_back(dayAppointment.second[i]);
+                }
                 dayAppointment.second.resize(_maxNPatient);
             }
         }
@@ -210,8 +213,18 @@ public:
 
         if (index < 0)
             throw DoctorDontExistException();
-        
-        doctorsOrder[index].setMaxNPatient(maxP);
+
+        vector<string> deletedPatients;
+        doctorsOrder[index].setMaxNPatient(maxP, deletedPatients);
+
+        for (auto it = patientsOrder.begin(); it != patientsOrder.end();) {
+            if (find(deletedPatients.begin(), deletedPatients.end(), it->getName()) != deletedPatients.end()) {
+                it = patientsOrder.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
     }
 
     // change working days
