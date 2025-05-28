@@ -24,7 +24,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b4bc01d-3ae0-4c7d-9766-88951a6e6759" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../HW7_Q1_403101518/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../HW7_Q1_403101518/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HW7_Q1_403101518/HW7_Q1_403101518.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../HW7_Q1_403101518/HW7_Q1_403101518.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
@@ -78,7 +78,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "hw7q1",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW7_Q1_403101518",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -105,6 +105,7 @@
       <updated>1748104030765</updated>
       <workItem from="1748104038624" duration="4319000" />
       <workItem from="1748189012263" duration="76000" />
+      <workItem from="1748377921189" duration="242000" />
     </task>
     <servers />
   </component>
