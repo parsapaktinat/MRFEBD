@@ -156,6 +156,12 @@ public:
             }
         }
     }
+
+    void changeVertexWeight(const int vertexID, const double newWeight) {
+        auto it = vertices.find(vertexID);
+        if (it != vertices.end())
+            it->second.setWeight(newWeight);
+    }
 };
 
 // -----------------Controller-----------------
@@ -170,8 +176,7 @@ public:
 
     // Add graph
     void addGraph(cs graphID) {
-        if (!isRealNumber(graphID))
-            throw ErrorHappend();
+        checkInvalidCommands(graphID);
 
         int GRAPH_ID = stoi(graphID);
         if (!(GRAPH_ID < 100 && GRAPH_ID > 9))
@@ -183,11 +188,7 @@ public:
 
     // Add vertex
     void addVertex(cs graphID, cs vertexID, cs _weight) {
-        if (!isRealNumber(graphID) || !isRealNumber(vertexID) || !isRealNumber(_weight))
-            throw ErrorHappend();
-
-        if (vertexID.size() != 8)
-            throw ErrorHappend();
+        checkInvalidCommands(graphID,vertexID,"",_weight);
 
         int GRAPH_ID = stoi(graphID);
         int VERTEX_ID = stoi(vertexID);
@@ -202,11 +203,7 @@ public:
 
     // Add edge
     void addEdge(cs graphID, cs startVertexID, cs endVertexID, cs _weight) {
-        if (!isRealNumber(graphID) || !isRealNumber(startVertexID) || !isRealNumber(endVertexID) || !isRealNumber(_weight))
-            throw ErrorHappend();
-
-        if (startVertexID.size() != 8 || endVertexID.size() != 8)
-            throw ErrorHappend();
+        checkInvalidCommands(graphID,startVertexID,endVertexID,_weight);
 
         int GRAPH_ID = stoi(graphID);
         int START_VERTEX_ID = stoi(startVertexID);
@@ -222,11 +219,7 @@ public:
 
     // Delete vertex
     void delVertex(cs graphID, cs vertexID) {
-        if (!isRealNumber(graphID) || !isRealNumber(vertexID))
-            throw ErrorHappend();
-
-        if (vertexID.size() != 8)
-            throw ErrorHappend();
+        checkInvalidCommands(graphID,vertexID);
 
         int GRAPH_ID = stoi(graphID);
         int VERTEX_ID = stoi(vertexID);
@@ -240,11 +233,7 @@ public:
 
     // Delete edge
     void delEdge(cs graphID, cs startVertexID, cs endVertexID) {
-        if (!isRealNumber(graphID) || !isRealNumber(startVertexID) || !isRealNumber(endVertexID))
-            throw ErrorHappend();
-
-        if (startVertexID.size() != 8 || endVertexID.size() != 8)
-            throw ErrorHappend();
+        checkInvalidCommands(graphID,startVertexID,endVertexID);
 
         int GRAPH_ID = stoi(graphID);
         int START_VERTEX_ID = stoi(startVertexID);
@@ -255,6 +244,21 @@ public:
         int index = getGraphsIndex(GRAPH_ID);
 
         graphs[index].deleteEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID);
+    }
+
+    // Edit vertex
+    void editVertex(cs graphID, cs vertexID, cs weight) {
+        checkInvalidCommands(graphID, vertexID,"", weight);
+
+        int GRAPH_ID = stoi(graphID);
+        int VERTEX_ID = stoi(vertexID);
+        int WEIGHT = stod(weight);
+        if (!isThereThisGraph(GRAPH_ID))
+            throw ErrorHappend();
+
+        int index = getGraphsIndex(GRAPH_ID);
+
+        graphs[index].changeVertexWeight(vertexID,weight);
     }
 
     bool isThereThisGraph(const int graphID) const {
@@ -274,6 +278,27 @@ public:
             }
         }
         return index;
+    }
+
+    void checkInvalidCommands(cs GRAPH_ID = "", cs vertex1ID = "", cs vertex2ID = "", cs weight = "") {
+        if (!GRAPH_ID.empty())
+            if (!isRealNumber(GRAPH_ID))
+                throw ErrorHappend();
+        if (!vertex1ID.empty()) {
+            if (!isRealNumber(vertex1ID))
+                throw ErrorHappend();
+            if (vertex1ID.size() != 8)
+                throw ErrorHappend();
+        }
+        if (!vertex2ID.empty()) {
+            if (!isRealNumber(vertex2ID))
+                throw ErrorHappend();
+            if (vertex1ID.size() != 8)
+                throw ErrorHappend();
+        }
+        if (!weight.empty())
+            if (!isRealNumber(weight))
+                throw ErrorHappend();
     }
 };
 
@@ -342,6 +367,15 @@ public:
                     string startVertexID = cp[2];
                     string endVertexID = cp[3];
                     graphManagement.delEdge(graphID, startVertexID, endVertexID);
+                    counter++;
+                }
+
+                // Edit vertex
+                else if (cp[0] == "EDIT_VERTEX" && cp.size() == 4) {
+                    string graphID = cp[1];
+                    string vertexID = cp[2];
+                    string weight = cp[3];
+                    graphManagement.editVertex(graphID, vertexID, weight);
                     counter++;
                 }
 
