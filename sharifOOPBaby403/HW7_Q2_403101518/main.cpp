@@ -150,10 +150,10 @@ public:
 
     void deleteEdgeGraphClass(const int START_VERTEX_ID, const int END_VERTEX_ID) {
         for (auto it = edges.begin();it != edges.end();) {
-            if (it->connectsVertices(START_VERTEX_ID,END_VERTEX_ID)) {
-                edges.erase(it);
-                break;
-            }
+            if (it->connectsVertices(START_VERTEX_ID,END_VERTEX_ID))
+                it = edges.erase(it);
+            else
+                it++;
         }
     }
 
@@ -161,6 +161,14 @@ public:
         auto it = vertices.find(vertexID);
         if (it != vertices.end())
             it->second.setWeight(newWeight);
+    }
+
+    void changeEdgeWeight(const int START_VERTEX_ID, const int END_VERTEX_ID, const double WEIGHT) {
+        for (auto it = edges.begin();it != edges.end();) {
+            if (it->connectsVertices(START_VERTEX_ID,END_VERTEX_ID)) {
+                it->setWeight(WEIGHT);
+            }
+        }
     }
 };
 
@@ -197,7 +205,6 @@ public:
             throw ErrorHappend();
 
         int index = getGraphsIndex(GRAPH_ID);
-
         graphs[index].addVertexGraphClass(VERTEX_ID, weight);
     }
 
@@ -213,7 +220,6 @@ public:
             throw ErrorHappend();
 
         int index = getGraphsIndex(GRAPH_ID);
-
         graphs[index].addEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID, WEIGHT);
     }
 
@@ -227,7 +233,6 @@ public:
             throw ErrorHappend();
 
         int index = getGraphsIndex(GRAPH_ID);
-
         graphs[index].deleteVertexGraphClass(VERTEX_ID);
     }
 
@@ -242,7 +247,6 @@ public:
             throw ErrorHappend();
 
         int index = getGraphsIndex(GRAPH_ID);
-
         graphs[index].deleteEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID);
     }
 
@@ -257,8 +261,22 @@ public:
             throw ErrorHappend();
 
         int index = getGraphsIndex(GRAPH_ID);
+        graphs[index].changeVertexWeight(VERTEX_ID,WEIGHT);
+    }
 
-        graphs[index].changeVertexWeight(vertexID,weight);
+    // Edit edge
+    void editEdge(cs graphID, cs startVertexID, cs endVertexID, cs weight) {
+        checkInvalidCommands(graphID, startVertexID,endVertexID, weight);
+
+        int GRAPH_ID = stoi(graphID);
+        int START_VERTEX_ID = stoi(startVertexID);
+        int END_VERTEX_ID = stoi(endVertexID);
+        int WEIGHT = stod(weight);
+        if (!isThereThisGraph(GRAPH_ID))
+            throw ErrorHappend();
+
+        int index = getGraphsIndex(GRAPH_ID);
+        graphs[index].changeEdgeWeight(START_VERTEX_ID,END_VERTEX_ID,WEIGHT);
     }
 
     bool isThereThisGraph(const int graphID) const {
@@ -376,6 +394,16 @@ public:
                     string vertexID = cp[2];
                     string weight = cp[3];
                     graphManagement.editVertex(graphID, vertexID, weight);
+                    counter++;
+                }
+
+                // Edit edge
+                else if (cp[0] == "EDIT_EDGE" && cp.size() == 5) {
+                    string graphID = cp[1];
+                    string startVertexID = cp[2];
+                    string endVertexID = cp[3];
+                    string weight = cp[4];
+                    graphManagement.editEdge(graphID, startVertexID, endVertexID, weight);
                     counter++;
                 }
 
