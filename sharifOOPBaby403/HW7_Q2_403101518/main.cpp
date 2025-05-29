@@ -49,6 +49,7 @@ bool isRealNumber(cs str) {
     return hasDigit && i == str.size();
 }
 
+// -----------------Model-----------------
 class Vertex{
 private:
     int VERTEX_ID;
@@ -135,8 +136,29 @@ public:
             edges.push_back(newEdge);
         }
     }
+
+    void deleteVertexGraphClass(const int VERTEX_ID) {
+        vertices.erase(VERTEX_ID);
+
+        for (auto it = edges.begin();it != edges.end();) {
+            if (it->connectsVertices(VERTEX_ID, it->getStartVertexId()) || it->connectsVertices(VERTEX_ID, it->getEndVertexId()))
+                it = edges.erase(it);
+            else
+                it++;
+        }
+    }
+
+    void deleteEdgeGraphClass(const int START_VERTEX_ID, const int END_VERTEX_ID) {
+        for (auto it = edges.begin();it != edges.end();) {
+            if (it->connectsVertices(START_VERTEX_ID,END_VERTEX_ID)) {
+                edges.erase(it);
+                break;
+            }
+        }
+    }
 };
 
+// -----------------Controller-----------------
 class GraphManagement{
 private:
     vector<Graph> graphs;
@@ -210,6 +232,30 @@ public:
         graphs[index].addEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID, WEIGHT);
     }
 
+    // Delete vertex
+    void delVertex(cs graphID, cs vertexID) {
+        if (!isRealNumber(graphID) || !isRealNumber(vertexID))
+            throw ErrorHappend();
+
+        if (vertexID.size() != 8)
+            throw ErrorHappend();
+
+        int GRAPH_ID = stoi(graphID);
+        int VERTEX_ID = stoi(vertexID);
+        if (!isThereThisGraph(GRAPH_ID))
+            throw ErrorHappend();
+
+        int index = -1;
+        for (int i = 0;i < graphs.size();i++) {
+            if (graphs[i].getNo() == GRAPH_ID) {
+                index = i;
+                break;
+            }
+        }
+
+        graphs[index].deleteVertexGraphClass(VERTEX_ID);
+    }
+
     bool isThereThisGraph(const int graphID) const {
         for (const Graph &graph : graphs) {
             if (graph.getNo() == graphID)
@@ -219,6 +265,7 @@ public:
     }
 };
 
+// -----------------View-----------------
 class View{
 private:
     GraphManagement graphManagement;
@@ -268,6 +315,16 @@ public:
                     graphManagement.addEdge(graphID,startVertexID,endVertexID,weight);
                     counter++;
                 }
+
+                // Delete vertex
+                else if (cp[0] == "DEL_VERTEX" && cp.size() == 3) {
+                    string graphID = cp[1];
+                    string vertexID = cp[2];
+                    graphManagement.delVertex(graphID, vertexID);
+                    counter++;
+                }
+
+                //
 
                 // Invalid command
                 else
