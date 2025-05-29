@@ -11,24 +11,59 @@ public:
 };
 
 // Helper function to see is the ID is number or not
-bool isNumber(cs s) {
-    return !s.empty() && all_of(s.begin(), s.end(), ::isdigit);
+bool isRealNumber(cs str) {
+    if (str.empty()) {
+        return false;
+    }
+
+    size_t i = 0;
+    while (i < str.size() && isspace(str[i])) {
+        ++i;
+    }
+
+    if (i < str.size() && (str[i] == '+' || str[i] == '-')) {
+        ++i;
+    }
+
+    bool hasDigit = false;
+    bool hasDecimal = false;
+
+    while (i < str.size() && isdigit(str[i])) {
+        hasDigit = true;
+        ++i;
+    }
+
+    if (i < str.size() && str[i] == '.') {
+        hasDecimal = true;
+        ++i;
+    }
+
+    while (i < str.size() && isdigit(str[i])) {
+        hasDigit = true;
+        ++i;
+    }
+
+    while (i < str.size() && isspace(str[i])) {
+        ++i;
+    }
+
+    return hasDigit && i == str.size();
 }
 
 class Vertex{
 private:
-    int numberOfVertex;
+    int VERTEX_ID;
     double weight;
 
 public:
-    Vertex(int _numberOfVertex, double _weight) : numberOfVertex(_numberOfVertex), weight(_weight) {}
+    Vertex(int _VERTEX_ID, double _weight) : VERTEX_ID(_VERTEX_ID), weight(_weight) {}
 
     int getNumberOfVertex() const {
-        return numberOfVertex;
+        return VERTEX_ID;
     }
 
-    void setNumberOfVertex(int numberOfVertex) {
-        Vertex::numberOfVertex = numberOfVertex;
+    void setNumberOfVertex(int VERTEX_ID) {
+        Vertex::VERTEX_ID = VERTEX_ID;
     }
 
     double getWeight() const {
@@ -42,12 +77,12 @@ public:
 
 class Graph{
 private:
-    int No;
+    int GRAPH_ID;
     vector<Vertex *> vertices;
 
 public:
     Graph(int GRAPH_ID) {
-        No = GRAPH_ID;
+        this->GRAPH_ID = GRAPH_ID;
     }
 
     ~Graph() {
@@ -59,10 +94,13 @@ public:
     }
 
     int getNo() const {
-        return No;
+        return GRAPH_ID;
     }
 
-    
+    void addVertexGraphClass(const int VERTEX_ID, const double weight) {
+        auto *newVertex = new Vertex(VERTEX_ID, weight);
+        vertices.push_back(newVertex);
+    }
 };
 
 class GraphManagement{
@@ -80,7 +118,7 @@ public:
 
     // Add graph
     void addGraph(cs graphID) {
-        if (!isNumber(graphID))
+        if (!isRealNumber(graphID))
             throw ErrorHappend();
 
         int GRAPH_ID = stoi(graphID);
@@ -89,6 +127,39 @@ public:
 
         auto *newGraph = new Graph(GRAPH_ID);
         graphs.push_back(newGraph);
+    }
+
+    // Add vertex
+    void addVertex(cs graphID, cs vertexID, cs _weight) {
+        if (!isRealNumber(graphID) || !isRealNumber(vertexID) || !isRealNumber(_weight))
+            throw ErrorHappend();
+
+        if (vertexID.size() != 8)
+            throw ErrorHappend();
+
+        int GRAPH_ID = stoi(graphID);
+        int VERTEX_ID = stoi(vertexID);
+        double weight = stod(_weight);
+        if (!isThereThisGraph(GRAPH_ID))
+            throw ErrorHappend();
+
+        int index = -1;
+        for (int i = 0;i < graphs.size();i++) {
+            if (graphs[i]->getNo() == GRAPH_ID) {
+                index = i;
+                break;
+            }
+        }
+
+        graphs[index]->addVertexGraphClass(VERTEX_ID, weight);
+    }
+
+    bool isThereThisGraph(const int graphID) const {
+        for (auto * graph : graphs) {
+            if (graph->getNo() == graphID)
+                return true;
+        }
+        return false;
     }
 };
 
@@ -127,7 +198,9 @@ public:
                 else if (cp[0] == "ADD_VERTEX") {
                     string graphID = cp[1];
                     string vertexID = cp[2];
-                    string weight =
+                    string weight = cp[3];
+                    graphManagement.addVertex(graphID, vertexID, weight);
+                    counter++;
                 }
 
                 // Invalid command
