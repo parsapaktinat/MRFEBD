@@ -195,13 +195,7 @@ public:
         if (!isThereThisGraph(GRAPH_ID))
             throw ErrorHappend();
 
-        int index = -1;
-        for (int i = 0;i < graphs.size();i++) {
-            if (graphs[i].getNo() == GRAPH_ID) {
-                index = i;
-                break;
-            }
-        }
+        int index = getGraphsIndex(GRAPH_ID);
 
         graphs[index].addVertexGraphClass(VERTEX_ID, weight);
     }
@@ -221,13 +215,7 @@ public:
         if (!isThereThisGraph(GRAPH_ID))
             throw ErrorHappend();
 
-        int index = -1;
-        for (int i = 0;i < graphs.size();i++) {
-            if (graphs[i].getNo() == GRAPH_ID) {
-                index = i;
-                break;
-            }
-        }
+        int index = getGraphsIndex(GRAPH_ID);
 
         graphs[index].addEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID, WEIGHT);
     }
@@ -245,15 +233,28 @@ public:
         if (!isThereThisGraph(GRAPH_ID))
             throw ErrorHappend();
 
-        int index = -1;
-        for (int i = 0;i < graphs.size();i++) {
-            if (graphs[i].getNo() == GRAPH_ID) {
-                index = i;
-                break;
-            }
-        }
+        int index = getGraphsIndex(GRAPH_ID);
 
         graphs[index].deleteVertexGraphClass(VERTEX_ID);
+    }
+
+    // Delete edge
+    void delEdge(cs graphID, cs startVertexID, cs endVertexID) {
+        if (!isRealNumber(graphID) || !isRealNumber(startVertexID) || !isRealNumber(endVertexID))
+            throw ErrorHappend();
+
+        if (startVertexID.size() != 8 || endVertexID.size() != 8)
+            throw ErrorHappend();
+
+        int GRAPH_ID = stoi(graphID);
+        int START_VERTEX_ID = stoi(startVertexID);
+        int END_VERTEX_ID = stoi(endVertexID);
+        if (!isThereThisGraph(GRAPH_ID))
+            throw ErrorHappend();
+
+        int index = getGraphsIndex(GRAPH_ID);
+
+        graphs[index].deleteEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID);
     }
 
     bool isThereThisGraph(const int graphID) const {
@@ -262,6 +263,17 @@ public:
                 return true;
         }
         return false;
+    }
+
+    int getGraphsIndex(const int GRAPH_ID) {
+        int index = -1;
+        for (int i = 0;i < graphs.size();i++) {
+            if (graphs[i].getNo() == GRAPH_ID) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 };
 
@@ -324,7 +336,14 @@ public:
                     counter++;
                 }
 
-                //
+                // Delete edge
+                else if (cp[0] == "DEL_EDGE" && cp.size() == 4) {
+                    string graphID = cp[1];
+                    string startVertexID = cp[2];
+                    string endVertexID = cp[3];
+                    graphManagement.delEdge(graphID, startVertexID, endVertexID);
+                    counter++;
+                }
 
                 // Invalid command
                 else
