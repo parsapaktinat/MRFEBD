@@ -27,7 +27,6 @@ bool isRealNumber(cs str) {
 
     bool hasDigit = false;
     bool hasDecimal = false;
-
     while (i < str.size() && isdigit(str[i])) {
         hasDigit = true;
         ++i;
@@ -75,10 +74,42 @@ public:
     }
 };
 
+class Edge{
+private:
+    int START_VERTEX_ID;
+    int END_VERTEX_ID;
+    double WEIGHT;
+
+public:
+    Edge(int svi, int evi, double w) : START_VERTEX_ID(svi), END_VERTEX_ID(evi), WEIGHT(w) {}
+
+    int getEndVertexId() const {
+        return END_VERTEX_ID;
+    }
+
+    int getStartVertexId() const {
+        return START_VERTEX_ID;
+    }
+
+    double getWeight() const {
+        return WEIGHT;
+    }
+
+    void setWeight(double weight) {
+        WEIGHT = weight;
+    }
+
+    bool connectsVertices(int v1, int v2) const {
+        return (START_VERTEX_ID == v1 && END_VERTEX_ID == v2) ||
+               (START_VERTEX_ID == v2 && END_VERTEX_ID == v1);
+    }
+};
+
 class Graph{
 private:
     int GRAPH_ID;
-    vector<Vertex *> vertices;
+    map<int, Vertex> vertices;
+    vector<Edge> edges;
 
 public:
     Graph(int GRAPH_ID) {
@@ -86,10 +117,6 @@ public:
     }
 
     ~Graph() {
-        for (auto *ptr : vertices) {
-            delete ptr;
-            ptr = nullptr;
-        }
         vertices.clear();
     }
 
@@ -98,21 +125,24 @@ public:
     }
 
     void addVertexGraphClass(const int VERTEX_ID, const double weight) {
-        auto *newVertex = new Vertex(VERTEX_ID, weight);
-        vertices.push_back(newVertex);
+        Vertex newVertex(VERTEX_ID, weight);
+        vertices.insert({VERTEX_ID, newVertex});
+    }
+
+    void addEdgeGraphClass(const int START_VERTEX_ID, const int END_VERTEX_ID, const double WEIGHT) {
+        if (vertices.count(START_VERTEX_ID) == 1 && vertices.count(END_VERTEX_ID) == 1) {
+            Edge newEdge(START_VERTEX_ID, END_VERTEX_ID, WEIGHT);
+            edges.push_back(newEdge);
+        }
     }
 };
 
 class GraphManagement{
 private:
-    vector<Graph *> graphs;
+    vector<Graph> graphs;
 
 public:
     ~GraphManagement() {
-        for (auto *ptr : graphs) {
-            delete ptr;
-            ptr = nullptr;
-        }
         graphs.clear();
     }
 
@@ -125,7 +155,7 @@ public:
         if (!(GRAPH_ID < 100 && GRAPH_ID > 9))
             throw ErrorHappend();
 
-        auto *newGraph = new Graph(GRAPH_ID);
+        Graph newGraph(GRAPH_ID);
         graphs.push_back(newGraph);
     }
 
@@ -145,18 +175,44 @@ public:
 
         int index = -1;
         for (int i = 0;i < graphs.size();i++) {
-            if (graphs[i]->getNo() == GRAPH_ID) {
+            if (graphs[i].getNo() == GRAPH_ID) {
                 index = i;
                 break;
             }
         }
 
-        graphs[index]->addVertexGraphClass(VERTEX_ID, weight);
+        graphs[index].addVertexGraphClass(VERTEX_ID, weight);
+    }
+
+    // Add edge
+    void addEdge(cs graphID, cs startVertexID, cs endVertexID, cs _weight) {
+        if (!isRealNumber(graphID) || !isRealNumber(startVertexID) || !isRealNumber(endVertexID) || !isRealNumber(_weight))
+            throw ErrorHappend();
+
+        if (startVertexID.size() != 8 || endVertexID.size() != 8)
+            throw ErrorHappend();
+
+        int GRAPH_ID = stoi(graphID);
+        int START_VERTEX_ID = stoi(startVertexID);
+        int END_VERTEX_ID = stoi(endVertexID);
+        double WEIGHT = stod(_weight);
+        if (!isThereThisGraph(GRAPH_ID))
+            throw ErrorHappend();
+
+        int index = -1;
+        for (int i = 0;i < graphs.size();i++) {
+            if (graphs[i].getNo() == GRAPH_ID) {
+                index = i;
+                break;
+            }
+        }
+
+        graphs[index].addEdgeGraphClass(START_VERTEX_ID, END_VERTEX_ID, WEIGHT);
     }
 
     bool isThereThisGraph(const int graphID) const {
-        for (auto * graph : graphs) {
-            if (graph->getNo() == graphID)
+        for (const Graph &graph : graphs) {
+            if (graph.getNo() == graphID)
                 return true;
         }
         return false;
@@ -195,11 +251,21 @@ public:
                 }
 
                 // Add vertex
-                else if (cp[0] == "ADD_VERTEX") {
+                else if (cp[0] == "ADD_VERTEX" && cp.size() == 4) {
                     string graphID = cp[1];
                     string vertexID = cp[2];
                     string weight = cp[3];
                     graphManagement.addVertex(graphID, vertexID, weight);
+                    counter++;
+                }
+
+                // Add edge
+                else if (cp[0] == "ADD_EDGE" && cp.size() == 5) {
+                    string graphID = cp[1];
+                    string startVertexID = cp[2];
+                    string endVertexID = cp[3];
+                    string weight = cp[4];
+                    graphManagement.addEdge(graphID,startVertexID,endVertexID,weight);
                     counter++;
                 }
 
@@ -210,9 +276,12 @@ public:
                 // Exiting the program
                 if (counter >= numberOfCommands)
                     break;
+
+                cp.clear();
             }
             catch (const exception &e) {
                 cout << e.what() << endl;
+                cp.clear();
             }
         }
     }
