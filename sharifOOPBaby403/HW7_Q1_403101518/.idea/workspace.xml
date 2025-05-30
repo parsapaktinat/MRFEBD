@@ -26,6 +26,7 @@
     <list default="true" id="6889a8e9-5d42-4b6b-8508-adba5d249cc7" name="Changes" comment="PatinetsOrder container update with deleting an appointment.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HW7_Q2_403101518/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../HW7_Q2_403101518/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,12 +46,12 @@
     &quot;assignee&quot;: &quot;parsapaktinat&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:parsapaktinat/MRFEBD.git",
-    "accountId": "08ea4ae9-9662-4f42-bf36-0672beeddab0"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:parsapaktinat/MRFEBD.git&quot;,
+    &quot;accountId&quot;: &quot;08ea4ae9-9662-4f42-bf36-0672beeddab0&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/HW7_Q1_403101518.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -80,7 +81,7 @@
     "RunOnceActivity.west.config.association.type.startup.service": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "hw7q2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -109,6 +110,7 @@
       <workItem from="1748440879713" duration="2561000" />
       <workItem from="1748444686626" duration="2824000" />
       <workItem from="1748461540259" duration="188000" />
+      <workItem from="1748516006696" duration="1970000" />
     </task>
     <task id="LOCAL-00001" summary="Name changed and test case 2 becomes true.">
       <option name="closed" value="true" />

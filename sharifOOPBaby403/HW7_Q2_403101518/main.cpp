@@ -407,6 +407,8 @@ public:
                     counter++;
                 }
 
+                // 
+
                 // Invalid command
                 else
                     throw ErrorHappend();
