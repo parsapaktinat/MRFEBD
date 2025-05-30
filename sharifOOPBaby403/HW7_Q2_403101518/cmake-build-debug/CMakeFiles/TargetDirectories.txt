@@ -1,0 +1,3 @@
+/home/parsa/Documents/MRFEBD/sharifOOPBaby403/HW7_Q2_403101518/cmake-build-debug/CMakeFiles/HW7_Q2_403101518.dir
+/home/parsa/Documents/MRFEBD/sharifOOPBaby403/HW7_Q2_403101518/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/parsa/Documents/MRFEBD/sharifOOPBaby403/HW7_Q2_403101518/cmake-build-debug/CMakeFiles/rebuild_cache.dir
