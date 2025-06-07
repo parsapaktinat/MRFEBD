@@ -206,77 +206,6 @@ public:
             }
         }
     }
-
-    double calculateTotalWeight() const {
-        double sum = 0;
-        for (const auto& [id, vertex] : vertices)
-            sum += vertex.getWeight();
-        for (const auto& edge : edges)
-            sum += edge.getWeight();
-        return sum;
-    }
-
-    double calculateCompressionCost() const {
-        map<int, Vertex> tempVertices = vertices;
-        vector<Edge> tempEdges = edges;
-        double totalCost = 0;
-
-        while (tempVertices.size() > 1 && !tempEdges.empty()) {
-            auto it = tempEdges.begin();
-            int startVertexID = it->getStartVertexId();
-            int endVertexID = it->getEndVertexId();
-            double edgeWeight = it->getWeight();
-
-            Vertex vu = tempVertices[startVertexID];
-            Vertex vv = tempVertices[endVertexID];
-
-            int newId = min(startVertexID, endVertexID);
-            double newWeight = vu.getWeight() + vv.getWeight() + edgeWeight;
-
-            map<int, double> newNeighbors;
-            for (const auto & edge : tempEdges) {
-                int a = edge.getStartVertexId();
-                int b = edge.getEndVertexId();
-                int other = -1;
-                if (a == startVertexID && b != endVertexID)
-                    other = b;
-                if (b == startVertexID && a != endVertexID)
-                    other = a;
-                if (a == endVertexID && b != startVertexID)
-                    other = b;
-                if (b == endVertexID && a != startVertexID)
-                    other = a;
-                if (other != -1) {
-                    newNeighbors[other] += edge.getWeight();
-                }
-            }
-
-            tempVertices.erase(startVertexID);
-            tempVertices.erase(endVertexID);
-
-            for (auto it2 = tempEdges.begin(); it2 != tempEdges.end(); ) {
-                if ((it2->getStartVertexId() == startVertexID) || (it2->getEndVertexId() == startVertexID) || (it2->getStartVertexId() == endVertexID) || (it2->getEndVertexId() == endVertexID)) {
-                    it2 = tempEdges.erase(it2);
-                }
-                else
-                    ++it2;
-            }
-
-            tempVertices[newId] = Vertex(newId, newWeight);
-
-            for (const auto& [other, w] : newNeighbors) {
-                int a = min(newId, other);
-                int b = max(newId, other);
-                Edge newEdge = Edge(a, b, w);
-                tempEdges.push_back(newEdge);
-            }
-
-            totalCost += newWeight;
-        }
-
-        return totalCost;
-    }
-
 };
 
 // -----------------Controller-----------------
@@ -393,20 +322,6 @@ public:
         int index = getGraphsIndex(GRAPH_ID);
         return graphs[index];
     }
-
-    // Graph distance
-    void showGraphDistance(cs firstGraphID, cs secondGraphID) {
-        checkInvalidCommands(firstGraphID);
-        checkInvalidCommands(secondGraphID);
-
-        int FIRST_GRAPH_ID = stoi(firstGraphID);
-        int SECOND_GRAPH_ID = stoi(secondGraphID);
-
-        int index = getGraphsIndex(FIRST_GRAPH_ID);
-        double result = graphs[index].calculateTotalWeight();
-        cout << fixed << setprecision(2) << -1 * result << endl;
-    }
-
 
     bool isThereThisGraph(const int graphID) const {
         for (const Graph &graph : graphs) {
@@ -554,14 +469,6 @@ public:
                     for (auto & edge : edges) {
                         cout << graphID << " " << edge.getStartVertexId() << " " << edge.getEndVertexId() << " " << edge.getWeight() << endl;
                     }
-                    counter++;
-                }
-
-                // Graph distance
-                else if (cp[0] == "GRAPH_DISTANCE" && cp.size() == 3) {
-                    string firstGraphID = cp[1];
-                    string secondGraphID = cp[2];
-                    graphManagement.showGraphDistance(firstGraphID, secondGraphID);
                     counter++;
                 }
 
