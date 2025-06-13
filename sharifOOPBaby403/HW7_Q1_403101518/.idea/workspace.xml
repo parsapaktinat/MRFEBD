@@ -23,10 +23,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6889a8e9-5d42-4b6b-8508-adba5d249cc7" name="Changes" comment="PatinetsOrder container update with deleting an appointment.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="6889a8e9-5d42-4b6b-8508-adba5d249cc7" name="Changes" comment="Last commitment.">
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HW7_Q2_403101518/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../HW7_Q2_403101518/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HW7_Q2_403101518/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../HW7_Q2_403101518/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,12 +45,12 @@
     &quot;assignee&quot;: &quot;parsapaktinat&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;git@github.com:parsapaktinat/MRFEBD.git&quot;,
-    &quot;accountId&quot;: &quot;08ea4ae9-9662-4f42-bf36-0672beeddab0&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:parsapaktinat/MRFEBD.git",
+    "accountId": "9a5f44ed-464f-47ed-b366-d840b63c5dfd"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/HW7_Q1_403101518.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -81,7 +80,8 @@
     "RunOnceActivity.west.config.association.type.startup.service": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "hw7q2",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/parsa/Documents/MRFEBD/sharifOOPBaby403/HW7_Q2_403101518/main.cpp",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -108,9 +108,11 @@
       <workItem from="1748378247421" duration="455000" />
       <workItem from="1748415404232" duration="2070000" />
       <workItem from="1748440879713" duration="2561000" />
+      <workItem from="1748444686626" duration="2947000" />
       <workItem from="1748444686626" duration="2824000" />
       <workItem from="1748461540259" duration="188000" />
       <workItem from="1748516006696" duration="1970000" />
+      <workItem from="1748592711740" duration="43000" />
     </task>
     <task id="LOCAL-00001" summary="Name changed and test case 2 becomes true.">
       <option name="closed" value="true" />
@@ -128,7 +130,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748446276831</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Mission passed.">
+      <option name="closed" value="true" />
+      <created>1748448482014</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1748448482014</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Last commitment.">
+      <option name="closed" value="true" />
+      <created>1748448523620</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748448523620</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,6 +160,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Name changed and test case 2 becomes true." />
     <MESSAGE value="PatinetsOrder container update with deleting an appointment." />
-    <option name="LAST_COMMIT_MESSAGE" value="PatinetsOrder container update with deleting an appointment." />
+    <MESSAGE value="Mission passed." />
+    <MESSAGE value="Last commitment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Last commitment." />
   </component>
 </project>

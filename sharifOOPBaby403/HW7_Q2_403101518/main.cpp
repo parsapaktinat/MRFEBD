@@ -119,10 +119,27 @@ public:
 
     ~Graph() {
         vertices.clear();
+        edges.clear();
     }
 
     int getNo() const {
         return GRAPH_ID;
+    }
+
+    size_t getNumOfVertices() const {
+        return vertices.size();
+    }
+
+    size_t getNumOfEdges() const {
+        return edges.size();
+    }
+
+    map<int,Vertex> &getVertices() {
+        return vertices;
+    }
+
+    vector<Edge> & getEdges() {
+        return edges;
     }
 
     void addVertexGraphClass(const int VERTEX_ID, const double weight) {
@@ -167,6 +184,25 @@ public:
         for (auto it = edges.begin();it != edges.end();) {
             if (it->connectsVertices(START_VERTEX_ID,END_VERTEX_ID)) {
                 it->setWeight(WEIGHT);
+            }
+        }
+    }
+
+    void sortEdges() {
+        for (int i = 0;i < edges.size() - 1;i++) {
+            for (int j = 0;j < edges.size() - i - 1;j++) {
+                if (edges[j].getStartVertexId() > edges[j + 1].getStartVertexId()) {
+                    Edge temp = edges[j];
+                    edges[j] = edges[j + 1];
+                    edges[j + 1] = temp;
+                }
+                else if (edges[j].getStartVertexId() == edges[j + 1].getStartVertexId()) {
+                    if (edges[j].getEndVertexId() > edges[j + 1].getEndVertexId()) {
+                        Edge temp = edges[j];
+                        edges[j] = edges[j + 1];
+                        edges[j + 1] = temp;
+                    }
+                }
             }
         }
     }
@@ -277,6 +313,14 @@ public:
 
         int index = getGraphsIndex(GRAPH_ID);
         graphs[index].changeEdgeWeight(START_VERTEX_ID,END_VERTEX_ID,WEIGHT);
+    }
+
+    // Show graph
+    Graph &getGraph(cs graphID) {
+        checkInvalidCommands(graphID);
+        int GRAPH_ID = stoi(graphID);
+        int index = getGraphsIndex(GRAPH_ID);
+        return graphs[index];
     }
 
     bool isThereThisGraph(const int graphID) const {
@@ -407,7 +451,26 @@ public:
                     counter++;
                 }
 
-                // 
+                // Show graph
+                else if (cp[0] == "SHOW_GRAPH" && cp.size() == 2) {
+                    string graphID = cp[1];
+
+                    Graph graphManaged = graphManagement.getGraph(graphID);
+                    cout << fixed << setprecision(2);
+                    cout << graphID << " " << graphManaged.getNumOfVertices() << " " << graphManaged.getNumOfEdges() << endl;
+
+                    map<int, Vertex> vertices = graphManaged.getVertices();
+                    graphManaged.sortEdges();
+                    vector<Edge> edges = graphManaged.getEdges();
+
+                    for (auto & vertex : vertices) {
+                        cout << graphID << " " << vertex.first << " " << vertex.second.getWeight() << endl;
+                    }
+                    for (auto & edge : edges) {
+                        cout << graphID << " " << edge.getStartVertexId() << " " << edge.getEndVertexId() << " " << edge.getWeight() << endl;
+                    }
+                    counter++;
+                }
 
                 // Invalid command
                 else
