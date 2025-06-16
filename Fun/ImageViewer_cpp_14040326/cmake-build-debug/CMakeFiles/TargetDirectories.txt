@@ -1,0 +1,3 @@
+/home/parsa/Documents/MRFEBD/Fun/ImageViewer_cpp_14040326/cmake-build-debug/CMakeFiles/ImageViewer_cpp_14040326.dir
+/home/parsa/Documents/MRFEBD/Fun/ImageViewer_cpp_14040326/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/parsa/Documents/MRFEBD/Fun/ImageViewer_cpp_14040326/cmake-build-debug/CMakeFiles/rebuild_cache.dir
