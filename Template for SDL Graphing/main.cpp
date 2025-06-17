@@ -3,9 +3,9 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL_image.h>
+//#include <SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL2_gfx.h>
+//#include <SDL2/SDL2_gfx.h>
 #include <SDL2/SDL_mixer.h>
 
 using namespace std;
@@ -29,6 +29,8 @@ bool check_quit();
 
 int main (int argv,char* argc[]) {
     initialize_window();
+
+    check_quit();
 
     // ALWAYS WE USING THIS AFTER EVERY PROGRAMING WITH SDL
     SDL_RenderPresent(renderer);

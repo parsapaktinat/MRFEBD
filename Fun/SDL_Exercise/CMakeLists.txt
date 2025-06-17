@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.30)
-project(ImageViewer_cpp_14040326)
+project(SDL_Exercise)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ImageViewer_cpp_14040326 main.cpp)
+add_executable(SDL_Exercise main.cpp)
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS}) # Add SDL2 include directories

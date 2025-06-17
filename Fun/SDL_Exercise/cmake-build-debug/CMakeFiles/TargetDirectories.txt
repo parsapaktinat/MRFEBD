@@ -1,0 +1,3 @@
+/home/parsa/Documents/MRFEBD/Fun/SDL_Exercise/cmake-build-debug/CMakeFiles/SDL_Exercise.dir
+/home/parsa/Documents/MRFEBD/Fun/SDL_Exercise/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/parsa/Documents/MRFEBD/Fun/SDL_Exercise/cmake-build-debug/CMakeFiles/rebuild_cache.dir
