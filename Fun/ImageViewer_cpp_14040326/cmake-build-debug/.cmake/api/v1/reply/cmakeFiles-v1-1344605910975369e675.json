@@ -128,7 +128,29 @@
 		},
 		{
 			"isExternal" : true,
-			"path" : "/usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake"
+			"path" : "/usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVConfig-version.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVConfig.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/parsa/clion-2024.3.3/bin/cmake/linux/x64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/parsa/clion-2024.3.3/bin/cmake/linux/x64/share/cmake-3.30/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVModules.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVModules-release.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
