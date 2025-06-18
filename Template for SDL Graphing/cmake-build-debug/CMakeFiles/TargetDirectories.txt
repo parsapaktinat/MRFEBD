@@ -1,0 +1,3 @@
+/home/parsa/Documents/MRFEBD/Template for SDL Graphing/cmake-build-debug/CMakeFiles/Template_for_SDL_Graphing.dir
+/home/parsa/Documents/MRFEBD/Template for SDL Graphing/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/parsa/Documents/MRFEBD/Template for SDL Graphing/cmake-build-debug/CMakeFiles/rebuild_cache.dir

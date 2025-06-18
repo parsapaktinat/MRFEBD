@@ -1,0 +1,3 @@
+/home/parsa/Documents/MRFEBD/Fun/ImageToAscii_cpp_14040326/cmake-build-debug/CMakeFiles/ImageToAscii_cpp_14040326.dir
+/home/parsa/Documents/MRFEBD/Fun/ImageToAscii_cpp_14040326/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/parsa/Documents/MRFEBD/Fun/ImageToAscii_cpp_14040326/cmake-build-debug/CMakeFiles/rebuild_cache.dir
