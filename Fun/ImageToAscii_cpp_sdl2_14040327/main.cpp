@@ -5,7 +5,7 @@ using namespace std;
 
 //const string asciiChars = "`^\\\",:;Il!i~+_-?][}{1)(|\\\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 
-const string asciiChars = " .-*+x#@a";
+const string asciiChars = " ,:;+*i!?t%B@$";
 
 int mapRanged(int, int, int, int, int);
 
@@ -24,10 +24,11 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
     }
 
-    Uint32 *pixels = (Uint32*)surface->pixels;
-    int width = surface->w * 3 / 4;
+    Uint32 *pixels = (Uint32 *)surface->pixels;
+    int width = surface->w * 0.75;
     int height = surface->h;
     int pitch = surface->pitch / 4;
+//    cout << pitch << endl;
 
     for (int y = 0; y < height; y+=2) {
         for (int x = 0; x < width; x++) {
@@ -35,8 +36,8 @@ int main(int argc, char* argv[]) {
             Uint8 r, g, b, a;
             SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
 
-            int grayPixel = static_cast<int>(r*0.3 + g*0.59 + b*0.11);
-            cout << asciiChars[mapRanged(grayPixel, 0, 255, 0, 9)];
+            int grayPixel = static_cast<int>((r + g + b)/3);
+            cout << asciiChars[mapRanged(grayPixel, 0, 255, 0, 14)];
         }
         cout << endl;
     }

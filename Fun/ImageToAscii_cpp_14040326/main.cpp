@@ -8,10 +8,10 @@ int mapRange(int, int, int, int, int);
 int main()
 {
     cv::Mat image;
-    const string path = "/home/parsa/Downloads/images (1).jpeg";
-    string asciiChars = "`^\\\",:;Il!i~+_-?][}{1)(|\\\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+    const string path = "/home/parsa/Downloads/images.jpeg";
+    string asciiChars = " ,:;+*i!?t%B@$";
     image = cv::imread(path, cv::IMREAD_GRAYSCALE);
-    cv::resize(image, image, cv::Size(image.size().width, image.size().height));
+    cv::resize(image, image, cv::Size(image.size().width, image.size().height/2));
 
     if (image.empty()) {
         cerr << "Could not open or find the image" << endl;
@@ -22,7 +22,7 @@ int main()
     for (int i = 0; i < image.rows; ++i) {
         for (int j = 0; j < image.cols; ++j) {
             int grayScaleValue = static_cast<int>(image.at<uchar>(i, j));
-            cout << asciiChars[mapRange(grayScaleValue, 0, 255, 0, 22)];
+            cout << asciiChars[mapRange(grayScaleValue, 0, 255, 0, 14)];
         }
         cout << endl;
     }
