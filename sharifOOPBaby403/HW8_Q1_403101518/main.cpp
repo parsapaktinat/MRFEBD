@@ -19,8 +19,8 @@ private:
     string errorText;
 public:
     bool errorHapen(bool e) {}
-    void setErrorText(string et) {}
-    void setText(string t) {}
+    void setErrorText(const string& et) {}
+    void setText(const string& t) {}
     void print() {}
 };
 
@@ -29,24 +29,26 @@ protected:
     string word;
 public:
     virtual ~Data() = default;
-    virtual void setWord(string w) = 0;
+    virtual void setWord(const string& w) = 0;
     string getWord() {}
 };
+
 class VectorData : public Data{
 private:
     vector<int> vec;
 public:
     vector<int> getVector() {}
-    void setWord(string w) override {
+    void setWord(const string& w) override {
         word = w;
         for (char ch:word) {
-            vec.push_back(ch);
+            vec.push_back(static_cast<int>(ch));
         }
     }
 };
+
 class stringData : public Data{
 public:
-    void setWord(string w) override {
+    void setWord(const string& w) override {
         word = w;
     }
 };
@@ -58,6 +60,7 @@ private:
 public:
     vector<Data*> getAllData() {}
     Data* getDataAt(int i) {}
+
     void cinData() {}
 };
 
@@ -67,37 +70,60 @@ protected:
     int version;
     DataSet trainDate;
 public:
-    PIModel(const string& n, int v) : name(n), version(v) {}
-    virtual void train(DataSet& ds) = 0;
+    PIModel(const string &n, int v) : name(n), version(v) {}
+
     DataSet getDataSet() {}
+
     void setYourNameAndVersion() {}
-    Response responce (const string& input) {}
+
+    virtual void train(DataSet &ds) = 0;
+
+    virtual Response response(const string &input) = 0;
 };
+
 class Parrots : public PIModel{
 public:
     Parrots(const string& n, int v) : PIModel(n, v) {}
+
     void train(DataSet& ds) override {
         trainDate = ds;
     }
+
+    Response response (const string& input) override {
+
+    }
+}
 };
+
 class Grammarly : public PIModel{
 private:
     bool autoCorrect;
 public:
     Grammarly(const string& n, int v) : PIModel(n, v) {}
     void setAutoCorrect(bool ac) {}
+
     void train(DataSet& ds) override {
         trainDate = ds;
     }
+
+    Response response (const string& input) override {
+
+    }
 };
+
 class MathGeek : public PIModel{
 private:
     int dataVectorSize;
 public:
     MathGeek(const string& n, int v) : PIModel(n, v) {}
     void setDataVectorSize(int dvs) {}
+
     void train(DataSet& ds) override {
         trainDate = ds;
+    }
+
+    Response response (const string& input) override {
+
     }
 };
 
