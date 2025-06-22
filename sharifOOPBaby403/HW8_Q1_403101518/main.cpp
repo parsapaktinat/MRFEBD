@@ -5,7 +5,6 @@
 #include <iostream>
 using namespace std;
 
-
 // *****************  Exceptions  *****************
 class InvalidCommand : public exception {
 public:
@@ -20,8 +19,13 @@ public:
         return "!!! Error : Invalid name for PI !!!";
     }
 };
-// *****************  Exceptions  *****************
 
+// ***************** Helper Functions *****************
+string trimString(const string& s) {
+    size_t first = s.find_first_not_of(" \t");
+    size_t last = s.find_last_not_of(" \t");
+    return s.substr(first, last - first + 1);
+}
 
 // *****************  Models  *****************
 class Response{
@@ -56,6 +60,13 @@ public:
     string getWord() const { return word; }
 };
 
+class stringData : public Data{
+public:
+    void setWord(const string& w) override {
+        word = w;
+    }
+};
+
 class VectorData : public Data{
 private:
     vector<int> vec;
@@ -71,15 +82,6 @@ public:
     }
 };
 
-class stringData : public Data{
-public:
-    void setWord(const string& w) override {
-        word = w;
-    }
-};
-// *****************  Models  *****************
-
-
 // *****************  Controllers  *****************
 class DataSet{
 private:
@@ -87,6 +89,9 @@ private:
     string name;
 
 public:
+    DataSet(const string& _name, const vector<Data*>& _datas) : name(_name), datas(_datas) {}
+    DataSet() = default;
+
     ~DataSet() {
         for (auto data : datas) {
             delete data;
@@ -107,7 +112,7 @@ protected:
     DataSet trainData;
 
 public:
-    PIModel(const string &n, int v) : name(n), version(v) {}
+    PIModel(const string& n, int v) : name(n), version(v) {}
 
     ~PIModel() = default;
 
@@ -166,13 +171,12 @@ public:
 
     }
 };
-// *****************  Controllers  *****************
-
 
 // *****************  View  *****************
 class View{
 private:
     vector<PIModel *> piModels;
+    DataSet
     int parrotCounter = 0, grammarlyCounter = 0, mathGeekCounter = 0;
 
 public:
@@ -191,9 +195,6 @@ public:
 
             while (ss >> word)
                 cp.push_back(word);
-
-//            for (auto word : cp)
-//                cout << word << " &&&&&&& &&&&&&& " << endl;
 
             try {
                 if (cp[0] == "!create" && cp[1] == "PI" && cp[2] == ":" && cp.size() == 4) {
@@ -222,11 +223,8 @@ public:
                     int version = name.back() - 48;
                     string nameWithoutVersion = name.substr(0,name.size() - 1);
 
-//                    cout << "Hello 873463864834676w87464738467q6347q4" << endl;
-
                     bool piModelFound = false;
                     for (PIModel* piModel : piModels) {
-//                        cout << piModel->getName() << "text_____________________" << endl;
                         if (piModel->getName() == nameWithoutVersion && piModel->getVersion() == version) {
                             cout << name << " -> Hi! I'm Parrots. You are using version " << version << "!" << endl;
                             piModelFound = true;
@@ -236,6 +234,19 @@ public:
 
                     if (!piModelFound)
                         throw InvalidCommand();
+                }
+
+                else if (cp[0] == "!create" && cp[2] == ":" && cp[3] == "word" && cp[4] == "count" && cp.size() == 7) {
+                    int wordCount = stoi(cp[6]);
+                    string dataSetName = cp[1];
+                    vector<string> datas;
+                    string l;
+                    for (int i = 0;i < wordCount;i++) {
+                        getline(cin,l);
+                        string trimedL = trimString(l);
+                        datas.push_back(l);
+                        cout << "pushed word: \"" << l << "\"" << endl;
+                    }
                 }
 
                 else
@@ -250,8 +261,6 @@ public:
         }
     }
 };
-// *****************  View  *****************
-
 
 int main() {
     View view;
