@@ -5,14 +5,6 @@ using namespace std;
 
 #define cs const string&
 
-int streak = 0;
-int numberOfCorrectAnswers = 0;
-int numberOfIncorrectAnswers = 0;
-
-int numberOfAllFlashcardsReviewed() {
-    return numberOfCorrectAnswers + numberOfIncorrectAnswers;
-}
-
 class Flashcard {
 private:
     string question;
@@ -27,12 +19,65 @@ private:
     vector<Flashcard *> daily;
     vector<Flashcard *> weekly;
     vector<Flashcard *> monthly;
+    int currentDay;
+    int streak;
+    int totalParticipationDays;
+    int numberOfMasterFlashcards;
+    int numberOfCorrectAnswers;
+    int numberOfIncorrectAnswers;
 
 public:
+    // Constructor
+    Controller() {
+        currentDay = 1;
+        streak = 0;
+        totalParticipationDays = 0;
+        numberOfMasterFlashcards = 0;
+        numberOfCorrectAnswers = 0;
+        numberOfIncorrectAnswers = 0;
+    }
+
+    // Getter and setters
+    int getCurrentDay() const {
+        return currentDay;
+    }
+
+    int getStreak() const {
+        return streak;
+    }
+
+    int getTotalParticipationDays() const {
+        return totalParticipationDays;
+    }
+
+    int getNumberOfMasterFlashcards() const {
+        return numberOfMasterFlashcards;
+    }
+
+    int getNumberOfCorrectAnswers() const {
+        return numberOfCorrectAnswers;
+    }
+
+    int getNumberOfIncorrectAnswers() const {
+        return numberOfIncorrectAnswers;
+    }
+
     // Add flashcard
     void addFlashcard(cs question, cs answer) {
         daily.push_back(new Flashcard(question, answer));
     }
+
+    // Next day
+    void nextDay() {
+        currentDay++;
+    }
+
+    // Helper function
+    int numberOfAllFlashcardsReviewed() {
+        return numberOfCorrectAnswers + numberOfIncorrectAnswers;
+    }
+
+
 };
 
 int main()
@@ -47,7 +92,7 @@ int main()
             cp.push_back(word);
 
         if (cp[0] == "streak") {
-            cout << "Your current streak is: " << streak << endl;
+            cout << "Your current streak is: " << controller.getStreak() << endl;
         }
 
         else if (cp[0] == "add" && cp[1] == "flashcard") {
@@ -69,12 +114,25 @@ int main()
                 cout << "Day: " << startDay << endl;
             else
                 cout << "Day: " << startDay << " to " << endDay << endl;
-            cout << "Correct Answers: " << numberOfCorrectAnswers << endl;
-            cout << "Incorrect Answers: " << numberOfIncorrectAnswers << endl;
-            cout << "Total: " << numberOfAllFlashcardsReviewed() << endl;
+            cout << "Correct Answers: " << controller.getNumberOfCorrectAnswers() << endl;
+            cout << "Incorrect Answers: " << controller.getNumberOfIncorrectAnswers() << endl;
+            cout << "Total: " << controller.numberOfAllFlashcardsReviewed() << endl;
         }
 
-        else if ()
+        else if (cp[0] == "get" && cp[1] == "progress" && cp[3] == "report") {
+            cout << "Challenge Progress Report:" << endl;
+            cout << "Day of the Challenge: " << controller.getCurrentDay() << endl;
+            cout << "Streak: " << controller.getStreak() << endl;
+            cout << "Total Days Participated: " << controller.getTotalParticipationDays() << endl;
+            cout << "Mastered Flashcards: " << controller.getNumberOfMasterFlashcards() << endl;
+        }
+
+        else if (cp[0] == "next" && cp[1] == "day") {
+            cout << "--------------------------------------------------" << endl;
+            controller.nextDay();
+            cout << "It is day " << controller.getCurrentDay() << " of your journey." << endl;
+            cout << "Your current streak is: " << controller.getStreak() << endl;
+        }
     }
 
     return 0;
