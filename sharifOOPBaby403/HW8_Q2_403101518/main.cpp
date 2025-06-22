@@ -12,6 +12,21 @@ private:
 
 public:
     Flashcard(cs _question, cs _answer) : question(_question), answer(_answer) {}
+
+    string getQuestion() const {
+        return question;
+    }
+
+    string getAnswer() const {
+        return answer;
+    }
+};
+
+struct Day {
+    int correctAnswer;
+    int incorrectAnswer;
+
+    int getTotal() { return correctAnswer + incorrectAnswer; }
 };
 
 class Controller {
