@@ -92,6 +92,14 @@ protected:
 public:
     PIModel(const string &n, int v) : name(n), version(v) {}
 
+    const string &getName() const {
+        return name;
+    }
+
+    int getVersion() const {
+        return version;
+    }
+
     DataSet getDataSet() {}
 
     void setYourNameAndVersion() {}
@@ -190,15 +198,33 @@ public:
                         throw InvalidNameForPI();
                 }
 
+                else if (cp[1] == "<-" && cp[2] == "$INTRO" && cp.size() == 3) {
+                    string name = cp[0];
+                    int version = name.back() - 48;
+                    string nameWithoutVersion = name.substr(0,name.size() - 1);
+
+                    bool piModelFound = false;
+                    for (PIModel* piModel : piModels) {
+                        if (piModel->getName() == nameWithoutVersion && piModel->getVersion() == version) {
+                            cout << name << " -> Hi! I'm Parrots. You are using version " << version << "!" << endl;
+                            piModelFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!piModelFound)
+                        throw InvalidCommand();
+                }
+
                 else
                     throw InvalidCommand();
+
+                cp.clear();
             }
             catch (const exception& e) {
                 cout << e.what() << endl;
                 cp.clear();
             }
-
-            cp.clear();
         }
     }
 };
