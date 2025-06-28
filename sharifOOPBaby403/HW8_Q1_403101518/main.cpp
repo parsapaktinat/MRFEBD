@@ -6,7 +6,6 @@
 #include <map>
 using namespace std;
 
-// *****************  Exceptions  *****************
 class InvalidCommand : public exception {
 public:
     const char* what() const noexcept override {
@@ -21,14 +20,12 @@ public:
     }
 };
 
-// ***************** Helper Functions *****************
 string trimString(const string& s) {
     size_t first = s.find_first_not_of(" \t");
     size_t last = s.find_last_not_of(" \t");
     return s.substr(first, last - first + 1);
 }
 
-// *****************  Models  *****************
 class Response{
 private:
     string text;
@@ -91,11 +88,9 @@ public:
     }
 };
 
-// *****************  Controllers  *****************
 class DataSet {
 private:
     vector<Data*> datas;
-    vector<string> linesRecordedCurrently;
     string name;
 
 public:
@@ -118,22 +113,8 @@ public:
         for (int i = 0; i < wordCount; i++) {
             getline(cin, line);
             string trimedL = trimString(line);
-            linesRecordedCurrently.push_back(trimedL);
+            datas.push_back(new StringData(trimedL));
             cout << "pushed word: \"" << trimedL << "\"" << endl;
-        }
-    }
-
-    void functionForTrainingDataPnG() {
-        datas.clear();
-        for (string& line : linesRecordedCurrently) {
-            datas.push_back(new StringData(line));
-        }
-    }
-
-    void functionForTrainingDataM() {
-        datas.clear();
-        for (string & line : linesRecordedCurrently) {
-            datas.push_back(new VectorData(line));
         }
     }
 };
@@ -146,7 +127,6 @@ protected:
 
 public:
     PIModel(const string& n, int v) : name(n), version(v) {}
-
     ~PIModel() = default;
 
     string getName() const { return name; }
@@ -190,17 +170,11 @@ private:
     int dataVectorSize;
 
 public:
-    MathGeek(const string& n, int v) : PIModel(n, v) {
-        dataVectorSize = 5;
-    }
+    MathGeek(const string& n, int v) : PIModel(n, v) { dataVectorSize = 5; }
 
     void setDataVectorSize(int dvs) {}
-
     void train(DataSet& ds) override { trainData = ds; }
-
-    Response response (const string& input) override {
-
-    }
+    Response response (const string& input) override {}
 };
 
 class Controller{
@@ -233,23 +207,17 @@ public:
                         string name = "Parrots_v";
                         name.append(to_string(parrotCounter));
                         piModels.emplace(name ,new Parrots("Parrots_v", parrotCounter));
-                    }
-
-                    else if (cp[3] == "Grammarly") {
+                    } else if (cp[3] == "Grammarly") {
                         cout << "Grammarly_v" << ++grammarlyCounter << " created" << endl;
                         string name = "Grammarlt_v";
                         name.append(to_string(grammarlyCounter));
                         piModels.emplace(name, new Grammarly("Grammarly_v", grammarlyCounter));
-                    }
-
-                    else if (cp[3] == "MathGeek") {
+                    } else if (cp[3] == "MathGeek") {
                         cout << "MathGeek_v" << ++mathGeekCounter << " created" << endl;
                         string name = "MathGeek_v";
                         name.append(to_string(mathGeekCounter));
                         piModels.emplace(name, new MathGeek("MathGeek_v", mathGeekCounter));
-                    }
-
-                    else
+                    } else
                         throw InvalidNameForPI();
                 }
 
@@ -257,7 +225,6 @@ public:
                     string name = cp[0];
                     int version = name.back() - 48;
                     string nameWithoutVersion = name.substr(0,name.size() - 1);
-
                     bool piModelFound = false;
                     for (auto piModel : piModels) {
                         if (piModel.second->getName() == nameWithoutVersion && piModel.second->getVersion() == version) {
@@ -266,7 +233,6 @@ public:
                             break;
                         }
                     }
-
                     if (!piModelFound)
                         throw InvalidCommand();
                 }
@@ -284,23 +250,14 @@ public:
                     string PIname = PIfullName.substr(0, PIfullName.size() - 1);
                     string dataSetName = cp[3];
                     int counter = PIfullName.back() - 48;
-                    if (PIname == "Parrots_v" || PIname == "Grammarly_v") {
-                        dataSets[dataSetName].functionForTrainingDataPnG();
-                        piModels[PIfullName]->train(dataSets[dataSetName]);
-                    }
-
-                    else if (PIname == "MathGeek_v") {
-                        dataSets[dataSetName].functionForTrainingDataM();
-                        piModels[PIfullName]->train(dataSets[dataSetName]);
-                    }
+                    piModels[PIfullName]->train(dataSets[dataSetName]);
                 }
 
                 else
                     throw InvalidCommand();
 
                 cp.clear();
-            }
-            catch (const exception& e) {
+            } catch (const exception& e) {
                 cout << e.what() << endl;
                 cp.clear();
             }
