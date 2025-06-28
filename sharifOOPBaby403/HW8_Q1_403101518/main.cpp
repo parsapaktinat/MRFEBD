@@ -67,11 +67,11 @@ private:
     vector<int> vec;
 
 public:
-    VectorData(const string& line) { setWord(line); }
-
-    void trimVector(int n ) {
-
+    VectorData(const string& line, int dataVectorSize) { 
+        setWord(line); 
+        vec.resize(dataVectorSize, 32);
     }
+
     vector<int> getVector() const { return vec; }
     void setWord(const string& w) override {
         word = w;
@@ -96,12 +96,12 @@ public:
         }
     }
 
-    void changeToVectorData() {
+    void changeToVectorData(int dataVectorSize) {
         vector<Data*> newDatas;
 
         for (auto data : datas) {
             string word = data->getWord();
-            newDatas.push_back(new VectorData(word)); 
+            newDatas.push_back(new VectorData(word, dataVectorSize));
         }
 
         for (auto data : datas) {
@@ -162,7 +162,11 @@ class Parrots : public PIModel{
 public:
     Parrots(const string& n, int v) : PIModel(n, v) {}
 
-    void train(DataSet& ds) override { trainData = ds; }
+    void train(DataSet& ds) override { 
+        ds.changeToStringData();
+        trainData = ds; 
+    }
+
     Response response (const string& input) override {}
 };
 
@@ -174,7 +178,12 @@ public:
     Grammarly(const string& n, int v) : PIModel(n, v) {}
 
     void setAutoCorrect(bool ac) {}
-    void train(DataSet& ds) override { trainData = ds; }
+
+    void train(DataSet& ds) override { 
+        ds.changeToStringData();
+        trainData = ds; 
+    }
+
     Response response (const string& input) override {}
 };
 
@@ -186,9 +195,11 @@ public:
     MathGeek(const string& n, int v) : PIModel(n, v) { dataVectorSize = 5; }
 
     void setDataVectorSize(int dvs) {}
+
     void train(DataSet& ds) override { 
-        
+        ds.changeToVectorData(dataVectorSize);
     }
+
     Response response (const string& input) override {}
 };
 
