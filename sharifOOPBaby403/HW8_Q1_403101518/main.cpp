@@ -34,11 +34,8 @@ private:
 
 public:
     bool errorHapen(bool e) const { return true; }
-
     void setErrorText(const string& et) {}
-
     void setText(const string& t) {}
-
     void print() {
         if (hasError)
             cout << errorText << endl;
@@ -53,20 +50,16 @@ protected:
 
 public:
     virtual ~Data() = default;
-    virtual void setWord(const string& w) = 0;
 
+    virtual void setWord(const string& w) = 0;
     string getWord() const { return word; }
 };
 
 class StringData : public Data{
 public:
-    StringData(const string& line) {
-        setWord(line);
-    }
+    StringData(const string& line) { setWord(line); }
 
-    void setWord(const string& w) override {
-        word = w;
-    }
+    void setWord(const string& w) override { word = w; }
 };
 
 class VectorData : public Data{
@@ -74,12 +67,12 @@ private:
     vector<int> vec;
 
 public:
-    VectorData(const string& line) {
-        setWord(line);
+    VectorData(const string& line) { setWord(line); }
+
+    void trimVector(int n ) {
+
     }
-
     vector<int> getVector() const { return vec; }
-
     void setWord(const string& w) override {
         word = w;
         for (char ch : word) {
@@ -94,7 +87,6 @@ private:
     string name;
 
 public:
-    DataSet(const string& _name, const vector<Data*>& _datas) : name(_name), datas(_datas) {}
     DataSet(const string& name) : name(name) {}
     DataSet() = default;
 
@@ -104,9 +96,38 @@ public:
         }
     }
 
+    void changeToVectorData() {
+        vector<Data*> newDatas;
+
+        for (auto data : datas) {
+            string word = data->getWord();
+            newDatas.push_back(new VectorData(word)); 
+        }
+
+        for (auto data : datas) {
+            delete data;
+        }
+
+        datas = newDatas;
+    }
+
+    void changeToStringData() {
+        vector<Data*> newDatas;
+
+        for (auto data : datas) {
+            string word = data->getWord();
+            newDatas.push_back(new StringData(word)); 
+        }
+
+        for (auto data : datas) {
+            delete data;
+        }
+
+        datas = newDatas;
+    }
+
     vector<Data*> getAllData() const { return datas; }
     Data* getDataAt(int i) { return datas[i]; }
-
     void cinData(int wordCount, const string& dataSetName) {
         cout << "lets push " << wordCount << " words to " << dataSetName << " !" << endl;
         string line;
@@ -132,7 +153,6 @@ public:
     string getName() const { return name; }
     int getVersion() const { return version; }
     DataSet getDataSet() { return trainData; }
-
     void setYourNameAndVersion() {}
     virtual void train(DataSet &ds) = 0;
     virtual Response response(const string &input) = 0;
@@ -143,10 +163,7 @@ public:
     Parrots(const string& n, int v) : PIModel(n, v) {}
 
     void train(DataSet& ds) override { trainData = ds; }
-
-    Response response (const string& input) override {
-
-    }
+    Response response (const string& input) override {}
 };
 
 class Grammarly : public PIModel{
@@ -157,12 +174,8 @@ public:
     Grammarly(const string& n, int v) : PIModel(n, v) {}
 
     void setAutoCorrect(bool ac) {}
-
     void train(DataSet& ds) override { trainData = ds; }
-
-    Response response (const string& input) override {
-
-    }
+    Response response (const string& input) override {}
 };
 
 class MathGeek : public PIModel{
@@ -173,7 +186,9 @@ public:
     MathGeek(const string& n, int v) : PIModel(n, v) { dataVectorSize = 5; }
 
     void setDataVectorSize(int dvs) {}
-    void train(DataSet& ds) override { trainData = ds; }
+    void train(DataSet& ds) override { 
+        
+    }
     Response response (const string& input) override {}
 };
 
