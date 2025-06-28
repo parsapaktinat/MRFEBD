@@ -22,24 +22,50 @@ public:
     }
 };
 
-struct Day {
-    int correctAnswer;
-    int incorrectAnswer;
+class LeitnerBox {
+private:
+    vector<Flashcard> flashcards;
 
-    int getTotal() { return correctAnswer + incorrectAnswer; }
+public:
+    void addFlashcard(const Flashcard& flashcard) {
+        flashcards.push_back(flashcard);
+    }
+
+    vector<Flashcard> getForReview(int& count) {
+        vector<Flashcard> result;
+        if (count > flashcards.size()) {
+            for (auto & flashcard : flashcards) {
+                result.push_back(flashcard);
+            }
+            count -= flashcards.size();
+        }
+
+        else {
+            for (auto it = flashcards.begin(); it != flashcards.end(); it++) {
+                result.push_back(*it);
+            }
+        }
+
+        return result;
+    }
+};
+
+class Day {
+private:
+
 };
 
 class Controller {
 private:
-    vector<Flashcard *> daily;
-    vector<Flashcard *> weekly;
-    vector<Flashcard *> monthly;
+    LeitnerBox daily, weekly, monthly;
+    vector<Flashcard> masteredFlashCards;
+    vector<int> daysPracticed;
+    int lastDayPracticed;
     int currentDay;
     int streak;
     int totalParticipationDays;
     int numberOfMasterFlashcards;
     int numberOfCorrectAnswers;
-    int numberOfIncorrectAnswers;
 
 public:
     // Constructor
@@ -49,50 +75,19 @@ public:
         totalParticipationDays = 0;
         numberOfMasterFlashcards = 0;
         numberOfCorrectAnswers = 0;
-        numberOfIncorrectAnswers = 0;
-    }
-
-    // Getter and setters
-    int getCurrentDay() const {
-        return currentDay;
-    }
-
-    int getStreak() const {
-        return streak;
-    }
-
-    int getTotalParticipationDays() const {
-        return totalParticipationDays;
-    }
-
-    int getNumberOfMasterFlashcards() const {
-        return numberOfMasterFlashcards;
-    }
-
-    int getNumberOfCorrectAnswers() const {
-        return numberOfCorrectAnswers;
-    }
-
-    int getNumberOfIncorrectAnswers() const {
-        return numberOfIncorrectAnswers;
+        lastDayPracticed = 0;
     }
 
     // Add flashcard
     void addFlashcard(cs question, cs answer) {
-        daily.push_back(new Flashcard(question, answer));
+        daily.addFlashcard(Flashcard(question, answer));
     }
 
-    // Next day
-    void nextDay() {
-        currentDay++;
+    // Review process
+    void reviewToday(int numFlash) {
+        vector<Flashcard> flashcards;
+        flash
     }
-
-    // Helper function
-    int numberOfAllFlashcardsReviewed() {
-        return numberOfCorrectAnswers + numberOfIncorrectAnswers;
-    }
-
-
 };
 
 int main()
@@ -106,11 +101,7 @@ int main()
         while (ss >> word)
             cp.push_back(word);
 
-        if (cp[0] == "streak") {
-            cout << "Your current streak is: " << controller.getStreak() << endl;
-        }
-
-        else if (cp[0] == "add" && cp[1] == "flashcard") {
+        if (cp[0] == "add" && cp[1] == "flashcard") {
             string question, answer;
             getline(cin, question);
             getline(cin, answer);
@@ -120,34 +111,37 @@ int main()
 
         else if (cp[0] == "review" && cp[1] == "today") {
             int numberOfFlashcards = stoi(cp[2]);
+            controller.reviewToday(numberOfFlashcards);
         }
 
-        else if (cp[0] == "get" && cp[1] == "report" && cp.size() == 4) {
-            string startDay = cp[2];
-            string endDay = cp[3];
-            if (startDay == endDay)
-                cout << "Day: " << startDay << endl;
-            else
-                cout << "Day: " << startDay << " to " << endDay << endl;
-            cout << "Correct Answers: " << controller.getNumberOfCorrectAnswers() << endl;
-            cout << "Incorrect Answers: " << controller.getNumberOfIncorrectAnswers() << endl;
-            cout << "Total: " << controller.numberOfAllFlashcardsReviewed() << endl;
-        }
 
-        else if (cp[0] == "get" && cp[1] == "progress" && cp[3] == "report") {
-            cout << "Challenge Progress Report:" << endl;
-            cout << "Day of the Challenge: " << controller.getCurrentDay() << endl;
-            cout << "Streak: " << controller.getStreak() << endl;
-            cout << "Total Days Participated: " << controller.getTotalParticipationDays() << endl;
-            cout << "Mastered Flashcards: " << controller.getNumberOfMasterFlashcards() << endl;
-        }
 
-        else if (cp[0] == "next" && cp[1] == "day") {
-            cout << "--------------------------------------------------" << endl;
-            controller.nextDay();
-            cout << "It is day " << controller.getCurrentDay() << " of your journey." << endl;
-            cout << "Your current streak is: " << controller.getStreak() << endl;
-        }
+        // else if (cp[0] == "get" && cp[1] == "report" && cp.size() == 4) {
+        //     string startDay = cp[2];
+        //     string endDay = cp[3];
+        //     if (startDay == endDay)
+        //         cout << "Day: " << startDay << endl;
+        //     else
+        //         cout << "Day: " << startDay << " to " << endDay << endl;
+        //     cout << "Correct Answers: " << controller.getNumberOfCorrectAnswers() << endl;
+        //     cout << "Incorrect Answers: " << controller.getNumberOfIncorrectAnswers() << endl;
+        //     cout << "Total: " << controller.numberOfAllFlashcardsReviewed() << endl;
+        // }
+        //
+        // else if (cp[0] == "get" && cp[1] == "progress" && cp[3] == "report") {
+        //     cout << "Challenge Progress Report:" << endl;
+        //     cout << "Day of the Challenge: " << controller.getCurrentDay() << endl;
+        //     cout << "Streak: " << controller.getStreak() << endl;
+        //     cout << "Total Days Participated: " << controller.getTotalParticipationDays() << endl;
+        //     cout << "Mastered Flashcards: " << controller.getNumberOfMasterFlashcards() << endl;
+        // }
+        //
+        // else if (cp[0] == "next" && cp[1] == "day") {
+        //     cout << "--------------------------------------------------" << endl;
+        //     controller.nextDay();
+        //     cout << "It is day " << controller.getCurrentDay() << " of your journey." << endl;
+        //     cout << "Your current streak is: " << controller.getStreak() << endl;
+        // }
     }
 
     return 0;

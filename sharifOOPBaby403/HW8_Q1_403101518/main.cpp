@@ -3,6 +3,7 @@
 #include <exception>
 #include <sstream>
 #include <iostream>
+#include <map>
 using namespace std;
 
 // *****************  Exceptions  *****************
@@ -60,8 +61,12 @@ public:
     string getWord() const { return word; }
 };
 
-class stringData : public Data{
+class StringData : public Data{
 public:
+    StringData(const string& line) {
+        setWord(line);
+    }
+
     void setWord(const string& w) override {
         word = w;
     }
@@ -72,24 +77,30 @@ private:
     vector<int> vec;
 
 public:
+    VectorData(const string& line) {
+        setWord(line);
+    }
+
     vector<int> getVector() const { return vec; }
 
     void setWord(const string& w) override {
         word = w;
-        for (char ch:word) {
+        for (char ch : word) {
             vec.push_back(static_cast<int>(ch));
         }
     }
 };
 
 // *****************  Controllers  *****************
-class DataSet{
+class DataSet {
 private:
     vector<Data*> datas;
+    vector<string> linesRecordedCurrently;
     string name;
 
 public:
     DataSet(const string& _name, const vector<Data*>& _datas) : name(_name), datas(_datas) {}
+    DataSet(const string& name) : name(name) {}
     DataSet() = default;
 
     ~DataSet() {
@@ -99,10 +110,32 @@ public:
     }
 
     vector<Data*> getAllData() const { return datas; }
-
     Data* getDataAt(int i) { return datas[i]; }
 
-    void cinData() {}
+    void cinData(int wordCount, const string& dataSetName) {
+        cout << "lets push " << wordCount << " words to " << dataSetName << " !" << endl;
+        string line;
+        for (int i = 0; i < wordCount; i++) {
+            getline(cin, line);
+            string trimedL = trimString(line);
+            linesRecordedCurrently.push_back(trimedL);
+            cout << "pushed word: \"" << trimedL << "\"" << endl;
+        }
+    }
+
+    void functionForTrainingDataPnG() {
+        datas.clear();
+        for (string& line : linesRecordedCurrently) {
+            datas.push_back(new StringData(line));
+        }
+    }
+
+    void functionForTrainingDataM() {
+        datas.clear();
+        for (string & line : linesRecordedCurrently) {
+            datas.push_back(new VectorData(line));
+        }
+    }
 };
 
 class PIModel {
@@ -117,15 +150,11 @@ public:
     ~PIModel() = default;
 
     string getName() const { return name; }
-
     int getVersion() const { return version; }
-
     DataSet getDataSet() { return trainData; }
 
     void setYourNameAndVersion() {}
-
     virtual void train(DataSet &ds) = 0;
-
     virtual Response response(const string &input) = 0;
 };
 
@@ -161,7 +190,9 @@ private:
     int dataVectorSize;
 
 public:
-    MathGeek(const string& n, int v) : PIModel(n, v) {}
+    MathGeek(const string& n, int v) : PIModel(n, v) {
+        dataVectorSize = 5;
+    }
 
     void setDataVectorSize(int dvs) {}
 
@@ -172,17 +203,16 @@ public:
     }
 };
 
-// *****************  View  *****************
-class View{
+class Controller{
 private:
-    vector<PIModel *> piModels;
-    DataSet
+    map<string, PIModel*> piModels; // name_version -> PI
+    map<string, DataSet> dataSets;  // name -> DataSet
     int parrotCounter = 0, grammarlyCounter = 0, mathGeekCounter = 0;
 
 public:
-    ~View () {
-        for (PIModel* piModel : piModels)
-            delete piModel;
+    ~Controller () {
+        for (auto pair : piModels)
+            delete pair.second;
     }
 
     void run() {
@@ -200,18 +230,23 @@ public:
                 if (cp[0] == "!create" && cp[1] == "PI" && cp[2] == ":" && cp.size() == 4) {
                     if (cp[3] == "Parrots") {
                         cout << "Parrots_v" << ++parrotCounter << " created" << endl;
-                        piModels.push_back(new Parrots("Parrots_v", parrotCounter));
+                        string name = "Parrots_v";
+                        name.append(to_string(parrotCounter));
+                        piModels.emplace(name ,new Parrots("Parrots_v", parrotCounter));
                     }
 
                     else if (cp[3] == "Grammarly") {
-                        cout << "Grammarlt_v" << ++grammarlyCounter << " created" << endl;
-                        piModels.push_back(new Grammarly("Grammarly_v", grammarlyCounter));
+                        cout << "Grammarly_v" << ++grammarlyCounter << " created" << endl;
+                        string name = "Grammarlt_v";
+                        name.append(to_string(grammarlyCounter));
+                        piModels.emplace(name, new Grammarly("Grammarly_v", grammarlyCounter));
                     }
 
                     else if (cp[3] == "MathGeek") {
-
                         cout << "MathGeek_v" << ++mathGeekCounter << " created" << endl;
-                        piModels.push_back(new MathGeek("MathGeek_v", mathGeekCounter));
+                        string name = "MathGeek_v";
+                        name.append(to_string(mathGeekCounter));
+                        piModels.emplace(name, new MathGeek("MathGeek_v", mathGeekCounter));
                     }
 
                     else
@@ -224,8 +259,8 @@ public:
                     string nameWithoutVersion = name.substr(0,name.size() - 1);
 
                     bool piModelFound = false;
-                    for (PIModel* piModel : piModels) {
-                        if (piModel->getName() == nameWithoutVersion && piModel->getVersion() == version) {
+                    for (auto piModel : piModels) {
+                        if (piModel.second->getName() == nameWithoutVersion && piModel.second->getVersion() == version) {
                             cout << name << " -> Hi! I'm Parrots. You are using version " << version << "!" << endl;
                             piModelFound = true;
                             break;
@@ -239,13 +274,24 @@ public:
                 else if (cp[0] == "!create" && cp[2] == ":" && cp[3] == "word" && cp[4] == "count" && cp.size() == 7) {
                     int wordCount = stoi(cp[6]);
                     string dataSetName = cp[1];
-                    vector<string> datas;
-                    string l;
-                    for (int i = 0;i < wordCount;i++) {
-                        getline(cin,l);
-                        string trimedL = trimString(l);
-                        datas.push_back(l);
-                        cout << "pushed word: \"" << l << "\"" << endl;
+                    DataSet dataSet(dataSetName);
+                    dataSet.cinData(wordCount, dataSetName);
+                    dataSets.insert({dataSetName, dataSet});
+                }
+
+                else if (cp[0] == "!train" && cp[2] == "with" && cp.size() == 4) {
+                    string PIfullName = cp[1];
+                    string PIname = PIfullName.substr(0, PIfullName.size() - 1);
+                    string dataSetName = cp[3];
+                    int counter = PIfullName.back() - 48;
+                    if (PIname == "Parrots_v" || PIname == "Grammarly_v") {
+                        dataSets[dataSetName].functionForTrainingDataPnG();
+                        piModels[PIfullName]->train(dataSets[dataSetName]);
+                    }
+
+                    else if (PIname == "MathGeek_v") {
+                        dataSets[dataSetName].functionForTrainingDataM();
+                        piModels[PIfullName]->train(dataSets[dataSetName]);
                     }
                 }
 
@@ -263,7 +309,7 @@ public:
 };
 
 int main() {
-    View view;
-    view.run();
+    Controller controller;
+    controller.run();
     return 0;
 }
