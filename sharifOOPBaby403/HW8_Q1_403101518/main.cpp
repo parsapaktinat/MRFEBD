@@ -94,12 +94,16 @@ public:
     DataSet(const string& name) : name(name) {}
     DataSet() = default;
 
+    void addData(unique_ptr<Data> data) {
+        datas.push_back(move(data));
+    }
+
     void changeToVectorData(int dataVectorSize) {
         vector<unique_ptr<Data>> newDatas;
         
         for (const auto& data : datas) {
             string word = data->getWord();
-            newDatas.push_back(make_unique<VectorData>(word));
+            newDatas.push_back(make_unique<VectorData>(word, dataVectorSize));
         }
         
         datas.clear();
@@ -120,8 +124,8 @@ public:
         datas = newDatas;
     }
 
-    vector<unique_ptr<Data>> getAllData() const { return datas; }
-    unique_ptr<Data> getDataAt(size_t i) { return move(datas[i]); }
+    const vector<unique_ptr<Data>>& getAllData() const { return datas; }
+    Data* getDataAt(size_t i) { return datas[i].get(); }
     
     void cinData(int wordCount, const string& dataSetName) {
         cout << "lets push " << wordCount << " words to " << dataSetName << " !" << endl;
@@ -149,7 +153,7 @@ public:
     int getVersion() const { return version; }
     DataSet getDataSet() { return trainData; }
     void setYourNameAndVersion() {}
-    virtual void train(DataSet &ds) = 0;
+    virtual void train(const DataSet &ds) = 0;
     virtual Response response(const string &input) = 0;
 };
 
@@ -161,7 +165,10 @@ public:
         cout << "Hello -------------- 6" << endl;
         ds.changeToStringData();
         cout << "Hello -------------- 4" << endl;
-        trainData = ds; 
+        trainData = DataSet();
+        for (const auto& data : ds.getAllData()) {
+            trainData.getAllData().push_back(make_unique<StringData>(data->getWord()));
+        }
         cout << "Hello -------------- 5" << endl;
     }
 
