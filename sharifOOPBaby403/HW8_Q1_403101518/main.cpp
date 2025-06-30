@@ -279,6 +279,13 @@ public:
                     piModels[PIfullName]->train(dataSets[dataSetName]);
                 }
 
+                else if (cp[1] == "<-" && cp.size() >= 3) {
+                    string name = cp[0];
+                    int version = name.back() - 48;
+                    string nameWithoutVersion = name.substr(0,name.size() - 1);
+                    
+                }
+
                 else
                     throw InvalidCommand();
 
