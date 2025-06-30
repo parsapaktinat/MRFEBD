@@ -3,6 +3,7 @@
 #include <exception>
 #include <sstream>
 #include <iostream>
+#include <memory>
 #include <map>
 using namespace std;
 
@@ -52,10 +53,10 @@ protected:
     string word;
 
 public:
-    virtual ~Data() = default;
+    virtual ~Data() {}
 
     virtual void setWord(const string& w) = 0;
-    string getWord() const { return word; }
+    virtual string getWord() const { return word; }
 };
 
 class StringData : public Data{
@@ -86,58 +87,49 @@ public:
 
 class DataSet {
 private:
-    vector<Data*> datas;
+    vector<unique_ptr<Data>> datas;
     string name;
 
 public:
     DataSet(const string& name) : name(name) {}
     DataSet() = default;
 
-    ~DataSet() {
-        for (auto data : datas) {
-            delete data;
-        }
-    }
-
     void changeToVectorData(int dataVectorSize) {
-        vector<Data*> newDatas;
-
-        for (auto data : datas) {
+        vector<unique_ptr<Data>> newDatas;
+        
+        for (const auto& data : datas) {
             string word = data->getWord();
-            newDatas.push_back(new VectorData(word, dataVectorSize));
+            newDatas.push_back(make_unique<VectorData>(word));
         }
-
-        for (auto data : datas) {
-            delete data;
-        }
+        
+        datas.clear();
 
         datas = newDatas;
     }
 
     void changeToStringData() {
-        vector<Data*> newDatas;
-
-        for (auto data : datas) {
+        vector<unique_ptr<Data>> newDatas;
+        
+        for (const auto& data : datas) {
             string word = data->getWord();
-            newDatas.push_back(new StringData(word)); 
+            newDatas.push_back(make_unique<StringData>(word));
         }
-
-        for (auto data : datas) {
-            delete data;
-        }
+        
+        datas.clear();
 
         datas = newDatas;
     }
 
-    vector<Data*> getAllData() const { return datas; }
-    Data* getDataAt(int i) { return datas[i]; }
+    vector<unique_ptr<Data>> getAllData() const { return datas; }
+    unique_ptr<Data> getDataAt(size_t i) { return move(datas[i]); }
+    
     void cinData(int wordCount, const string& dataSetName) {
         cout << "lets push " << wordCount << " words to " << dataSetName << " !" << endl;
-        string line;
+        string l;
         for (int i = 0; i < wordCount; i++) {
-            getline(cin, line);
-            string trimedL = trimString(line);
-            datas.push_back(new StringData(trimedL));
+            getline(cin, l);
+            string trimedL = trimString(l);
+            datas.push_back(make_unique<StringData>(trimedL));
             cout << "pushed word: \"" << trimedL << "\"" << endl;
         }
     }
@@ -166,8 +158,11 @@ public:
     Parrots(const string& n, int v) : PIModel(n, v) {}
 
     void train(DataSet& ds) override { 
+        cout << "Hello -------------- 6" << endl;
         ds.changeToStringData();
+        cout << "Hello -------------- 4" << endl;
         trainData = ds; 
+        cout << "Hello -------------- 5" << endl;
     }
 
     Response response (const string& input) override {
@@ -212,16 +207,11 @@ public:
 
 class Controller{
 private:
-    map<string, PIModel*> piModels; // name_version -> PI
+    map<string, unique_ptr<PIModel>> piModels; // name_version -> PI
     map<string, DataSet> dataSets;  // name -> DataSet
     int parrotCounter = 0, grammarlyCounter = 0, mathGeekCounter = 0;
 
 public:
-    ~Controller () {
-        for (auto pair : piModels)
-            delete pair.second;
-    }
-
     void run() {
         vector<string> cp;
         string line,word;
@@ -259,7 +249,7 @@ public:
                     int version = name.back() - 48;
                     string nameWithoutVersion = name.substr(0,name.size() - 1);
                     bool piModelFound = false;
-                    for (auto piModel : piModels) {
+                    for (auto& piModel : piModels) {
                         if (piModel.second->getName() == nameWithoutVersion && piModel.second->getVersion() == version) {
                             cout << name << " -> Hi! I'm Parrots. You are using version " << version << "!" << endl;
                             piModelFound = true;
@@ -275,15 +265,18 @@ public:
                     string dataSetName = cp[1];
                     DataSet dataSet(dataSetName);
                     dataSet.cinData(wordCount, dataSetName);
-                    dataSets.insert({dataSetName, dataSet});
+                    dataSets.emplace(dataSetName, dataSet);
                 }
 
                 else if (cp[0] == "!train" && cp[2] == "with" && cp.size() == 4) {
                     string PIfullName = cp[1];
                     string PIname = PIfullName.substr(0, PIfullName.size() - 1);
+                    cout << "Hello -------------- 1" << endl;
                     string dataSetName = cp[3];
-                    int counter = PIfullName.back() - 48;
+                    int counter = static_cast<char>(PIfullName.back()) - 48;
+                    cout << "Hello -------------- 2" << endl;
                     piModels[PIfullName]->train(dataSets[dataSetName]);
+                    cout << "Hello -------------- 3" << endl;
                 }
 
                 else if (cp[1] == "<-" && cp.size() >= 3) {
@@ -303,7 +296,8 @@ public:
                     throw InvalidCommand();
 
                 cp.clear();
-            } catch (const exception& e) {
+            } 
+            catch (const exception& e) {
                 cout << e.what() << endl;
                 cp.clear();
             }
