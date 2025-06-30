@@ -33,9 +33,12 @@ private:
     string errorText;
 
 public:
+    Response() { hasError = false; }
+
     bool errorHapen(bool e) const { return true; }
-    void setErrorText(const string& et) {}
-    void setText(const string& t) {}
+    void setErrorText(const string& et) { errorText= et; }
+    void setText(const string& t) { text = t; }
+
     void print() {
         if (hasError)
             cout << errorText << endl;
@@ -167,7 +170,11 @@ public:
         trainData = ds; 
     }
 
-    Response response (const string& input) override {}
+    Response response (const string& input) override {
+        Response result;
+        result.setText(input);
+        return result;
+    }
 };
 
 class Grammarly : public PIModel{
@@ -281,9 +288,15 @@ public:
 
                 else if (cp[1] == "<-" && cp.size() >= 3) {
                     string name = cp[0];
-                    int version = name.back() - 48;
-                    string nameWithoutVersion = name.substr(0,name.size() - 1);
-                    
+                    // int version = name.back() - 48;
+                    // string nameWithoutVersion = name.substr(0,name.size() - 1);
+
+                    size_t t = line.find_first_of(" ", line.find_first_of(" ") + 1);
+                    string input = line.substr(t);
+
+                    Response res = piModels[name]->response(input);
+                    cout << name << " -> ";
+                    res.print();
                 }
 
                 else
